@@ -26,16 +26,37 @@ class DeviceCell: UITableViewCell {
         fatalError("Not implemented yet")
     }
     
+    func set(device: Device) {
+        deviceNameLabel.text = device.name
+        deviceStateLabel.text = device.state
+        deviceIDLabel.text = device.id
+    }
+    
     func configureNameLabel() {
-        deviceStateLabel.numberOfLines = 0
-        deviceStateLabel.adjustsFontSizeToFitWidth = true
+//        deviceStateLabel.numberOfLines = 3
+        
+        deviceNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        deviceNameLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        deviceNameLabel.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        deviceNameLabel.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
+        deviceNameLabel.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
     }
     func configureIDLabel() {
-        deviceStateLabel.numberOfLines = 0
-        deviceStateLabel.adjustsFontSizeToFitWidth = true
+//        deviceStateLabel.numberOfLines = 3
+        
+        deviceIDLabel.translatesAutoresizingMaskIntoConstraints = false
+        deviceIDLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        deviceIDLabel.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        deviceIDLabel.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
+        deviceIDLabel.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
     }
     func configureStateLabel() {
-        deviceStateLabel.numberOfLines = 0
-        deviceStateLabel.adjustsFontSizeToFitWidth = true
+//        deviceStateLabel.numberOfLines = 3
+        
+        deviceStateLabel.translatesAutoresizingMaskIntoConstraints = false
+        deviceStateLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        deviceStateLabel.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        deviceStateLabel.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
+        deviceStateLabel.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
     }
 }

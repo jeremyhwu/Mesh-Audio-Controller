@@ -9,8 +9,8 @@
 import UIKit
 
 struct Device {
-    var name : UILabel
-    var id : UILabel
-    var state : UILabel
+    var name : String
+    var id : String
+    var state : String
 }
 

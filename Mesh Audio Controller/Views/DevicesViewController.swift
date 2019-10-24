@@ -36,7 +36,7 @@ class DevicesViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = 50
-        //register cells
+        tableView.register(DeviceCell.self, forCellReuseIdentifier: "DeviceCell")
         tableView.pin(to: view)
     }
     
@@ -58,7 +58,9 @@ class DevicesViewController: UIViewController {
         cbManager.stopScan()
         for (peripheral) in cbPeripherals{
             print(peripheral)
+            cells.append(Device(name: peripheral.name ?? "", id: peripheral.identifier.uuidString, state:"n/a for now"))
         }
+        self.tableView.reloadData()
     }
     
      @objc func handleRefreshControl(){
@@ -79,7 +81,10 @@ extension DevicesViewController : UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: "DeviceCell") as! DeviceCell 
+        let device = cells[indexPath.row]
+        cell.set(device: device)
+        return cell
     }
     
     
