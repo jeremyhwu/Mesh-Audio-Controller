@@ -10,11 +10,14 @@
 		1A7EC08B23613E4D00B2B136 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7EC08A23613E4D00B2B136 /* AppDelegate.swift */; };
 		1A7EC08D23613E4D00B2B136 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7EC08C23613E4D00B2B136 /* SceneDelegate.swift */; };
 		1A7EC08F23613E4D00B2B136 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7EC08E23613E4D00B2B136 /* ViewController.swift */; };
-		1A7EC09223613E4D00B2B136 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A7EC09023613E4D00B2B136 /* Main.storyboard */; };
 		1A7EC09423613E4E00B2B136 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A7EC09323613E4E00B2B136 /* Assets.xcassets */; };
 		1A7EC09723613E4E00B2B136 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A7EC09523613E4E00B2B136 /* LaunchScreen.storyboard */; };
 		1A7EC0A223613E4E00B2B136 /* Mesh_Audio_ControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7EC0A123613E4E00B2B136 /* Mesh_Audio_ControllerTests.swift */; };
 		1A7EC0AD23613E4E00B2B136 /* Mesh_Audio_ControllerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7EC0AC23613E4E00B2B136 /* Mesh_Audio_ControllerUITests.swift */; };
+		1A7EC0BB23613FFC00B2B136 /* DevicesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7EC0BA23613FFC00B2B136 /* DevicesViewController.swift */; };
+		1A7EC0BE2361420900B2B136 /* UIViewExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7EC0BD2361420900B2B136 /* UIViewExt.swift */; };
+		1A7EC0C22361434B00B2B136 /* DeviceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7EC0C12361434B00B2B136 /* DeviceCell.swift */; };
+		1A7EC0C823614AF000B2B136 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7EC0C723614AF000B2B136 /* Device.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,7 +42,6 @@
 		1A7EC08A23613E4D00B2B136 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1A7EC08C23613E4D00B2B136 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		1A7EC08E23613E4D00B2B136 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		1A7EC09123613E4D00B2B136 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1A7EC09323613E4E00B2B136 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1A7EC09623613E4E00B2B136 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1A7EC09823613E4E00B2B136 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -49,6 +51,10 @@
 		1A7EC0A823613E4E00B2B136 /* Mesh Audio ControllerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Mesh Audio ControllerUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A7EC0AC23613E4E00B2B136 /* Mesh_Audio_ControllerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mesh_Audio_ControllerUITests.swift; sourceTree = "<group>"; };
 		1A7EC0AE23613E4E00B2B136 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1A7EC0BA23613FFC00B2B136 /* DevicesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicesViewController.swift; sourceTree = "<group>"; };
+		1A7EC0BD2361420900B2B136 /* UIViewExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExt.swift; sourceTree = "<group>"; };
+		1A7EC0C12361434B00B2B136 /* DeviceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceCell.swift; sourceTree = "<group>"; };
+		1A7EC0C723614AF000B2B136 /* Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,10 +105,12 @@
 		1A7EC08923613E4D00B2B136 /* Mesh Audio Controller */ = {
 			isa = PBXGroup;
 			children = (
+				1A7EC0C423614AC800B2B136 /* Views */,
+				1A7EC0C323614AC200B2B136 /* Models */,
+				1A7EC0BC236141E600B2B136 /* Extensions and Utilities */,
 				1A7EC08A23613E4D00B2B136 /* AppDelegate.swift */,
 				1A7EC08C23613E4D00B2B136 /* SceneDelegate.swift */,
 				1A7EC08E23613E4D00B2B136 /* ViewController.swift */,
-				1A7EC09023613E4D00B2B136 /* Main.storyboard */,
 				1A7EC09323613E4E00B2B136 /* Assets.xcassets */,
 				1A7EC09523613E4E00B2B136 /* LaunchScreen.storyboard */,
 				1A7EC09823613E4E00B2B136 /* Info.plist */,
@@ -126,6 +134,31 @@
 				1A7EC0AE23613E4E00B2B136 /* Info.plist */,
 			);
 			path = "Mesh Audio ControllerUITests";
+			sourceTree = "<group>";
+		};
+		1A7EC0BC236141E600B2B136 /* Extensions and Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				1A7EC0BD2361420900B2B136 /* UIViewExt.swift */,
+			);
+			path = "Extensions and Utilities";
+			sourceTree = "<group>";
+		};
+		1A7EC0C323614AC200B2B136 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				1A7EC0C723614AF000B2B136 /* Device.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		1A7EC0C423614AC800B2B136 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				1A7EC0BA23613FFC00B2B136 /* DevicesViewController.swift */,
+				1A7EC0C12361434B00B2B136 /* DeviceCell.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -234,7 +267,6 @@
 			files = (
 				1A7EC09723613E4E00B2B136 /* LaunchScreen.storyboard in Resources */,
 				1A7EC09423613E4E00B2B136 /* Assets.xcassets in Resources */,
-				1A7EC09223613E4D00B2B136 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,8 +291,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A7EC0BB23613FFC00B2B136 /* DevicesViewController.swift in Sources */,
 				1A7EC08F23613E4D00B2B136 /* ViewController.swift in Sources */,
+				1A7EC0C22361434B00B2B136 /* DeviceCell.swift in Sources */,
+				1A7EC0BE2361420900B2B136 /* UIViewExt.swift in Sources */,
 				1A7EC08B23613E4D00B2B136 /* AppDelegate.swift in Sources */,
+				1A7EC0C823614AF000B2B136 /* Device.swift in Sources */,
 				1A7EC08D23613E4D00B2B136 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -297,14 +333,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		1A7EC09023613E4D00B2B136 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1A7EC09123613E4D00B2B136 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		1A7EC09523613E4E00B2B136 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
