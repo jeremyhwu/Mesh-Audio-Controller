@@ -18,6 +18,8 @@
 		1A7EC0BE2361420900B2B136 /* UIViewExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7EC0BD2361420900B2B136 /* UIViewExt.swift */; };
 		1A7EC0C22361434B00B2B136 /* DeviceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7EC0C12361434B00B2B136 /* DeviceCell.swift */; };
 		1A7EC0C823614AF000B2B136 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7EC0C723614AF000B2B136 /* Device.swift */; };
+		1AB9B70D236A38AB003BF397 /* GroupsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB9B70C236A38AB003BF397 /* GroupsViewController.swift */; };
+		1AB9B70F236A38F5003BF397 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB9B70E236A38F4003BF397 /* SettingsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +57,8 @@
 		1A7EC0BD2361420900B2B136 /* UIViewExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExt.swift; sourceTree = "<group>"; };
 		1A7EC0C12361434B00B2B136 /* DeviceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceCell.swift; sourceTree = "<group>"; };
 		1A7EC0C723614AF000B2B136 /* Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
+		1AB9B70C236A38AB003BF397 /* GroupsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsViewController.swift; sourceTree = "<group>"; };
+		1AB9B70E236A38F4003BF397 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,6 +161,8 @@
 			children = (
 				1A7EC0BA23613FFC00B2B136 /* DevicesViewController.swift */,
 				1A7EC0C12361434B00B2B136 /* DeviceCell.swift */,
+				1AB9B70C236A38AB003BF397 /* GroupsViewController.swift */,
+				1AB9B70E236A38F4003BF397 /* SettingsViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -295,9 +301,11 @@
 				1A7EC08F23613E4D00B2B136 /* ViewController.swift in Sources */,
 				1A7EC0C22361434B00B2B136 /* DeviceCell.swift in Sources */,
 				1A7EC0BE2361420900B2B136 /* UIViewExt.swift in Sources */,
+				1AB9B70D236A38AB003BF397 /* GroupsViewController.swift in Sources */,
 				1A7EC08B23613E4D00B2B136 /* AppDelegate.swift in Sources */,
 				1A7EC0C823614AF000B2B136 /* Device.swift in Sources */,
 				1A7EC08D23613E4D00B2B136 /* SceneDelegate.swift in Sources */,
+				1AB9B70F236A38F5003BF397 /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

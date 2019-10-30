@@ -22,11 +22,13 @@ class DevicesViewController: UIViewController {
     var dataSource : UITableViewDataSource?
     var timer = Timer()
     var cells: [Device] = []
+    var refreshControl = UIRefreshControl()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         configureTableView()
         configureBluetooth()
+        configureRefreshControl()
     }
     
     func configureTableView() {
@@ -35,7 +37,8 @@ class DevicesViewController: UIViewController {
         view.addSubview(tableView)
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.rowHeight = 50
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 300
         tableView.register(DeviceCell.self, forCellReuseIdentifier: "DeviceCell")
         tableView.pin(to: view)
     }
@@ -45,11 +48,30 @@ class DevicesViewController: UIViewController {
         peripheralManager = CBPeripheralManager(delegate: self, queue: nil)
     }
     
+    func configureRefreshControl() {
+        tableView.refreshControl = refreshControl
+        tableView.refreshControl?.addTarget(self, action:
+        #selector(handleRefreshControl),
+        for: .valueChanged)
+    }
+    
+    @objc func handleRefreshControl(){
+        // Reset vars and scan again
+        self.cbPeripherals = []
+        cells = []
+        tableView.reloadData()
+        self.scan()
+        // Dismiss the refresh control.
+        DispatchQueue.main.async {
+            self.tableView.refreshControl?.endRefreshing()
+        }
+    }
+    
     func scan(){
         print("Scanning for devices")
         //        cbManager.scanForPeripherals(withServices: [BTConstants.ServiceUUID], options: nil)
         cbManager.scanForPeripherals(withServices: nil, options: nil) //for debugging, find all bt devices
-        timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: false) { (timer) in
+        timer = Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { (timer) in
             self.stopscan()
         }
     }
@@ -62,17 +84,6 @@ class DevicesViewController: UIViewController {
         }
         self.tableView.reloadData()
     }
-    
-     @objc func handleRefreshControl(){
-            // Reset vars and scan again
-            self.cbPeripherals = []
-            tableView.reloadData()
-            self.scan()
-            // Dismiss the refresh control.
-            DispatchQueue.main.async {
-                self.tableView.refreshControl?.endRefreshing()
-            }
-        }
 }
 
 extension DevicesViewController : UITableViewDelegate, UITableViewDataSource {

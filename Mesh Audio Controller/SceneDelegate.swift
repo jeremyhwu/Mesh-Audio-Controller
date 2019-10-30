@@ -21,8 +21,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
-        let navController = UINavigationController(rootViewController: DevicesViewController())
-        window?.rootViewController = navController
+        let tabBarController = UITabBarController()
+        let devicesViewController = UINavigationController(rootViewController: DevicesViewController())
+        let settingsViewController = UITableViewController()
+        let groupsViewController = UITableViewController()
+        devicesViewController.title = "Devices"
+        settingsViewController.title = "Settings"
+        groupsViewController.title = "Groups"
+        let controllers = [devicesViewController, groupsViewController, settingsViewController]
+        tabBarController.viewControllers = controllers
+        window?.rootViewController = tabBarController
         window?.makeKeyAndVisible()
     }
 
