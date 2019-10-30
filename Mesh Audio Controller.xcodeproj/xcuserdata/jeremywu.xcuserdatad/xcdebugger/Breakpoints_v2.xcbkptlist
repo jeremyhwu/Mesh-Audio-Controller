@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "BD93A209-C7B3-459F-942D-2AAB6C08DA00"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "0AF5E072-D77E-4CD6-93C6-CA37989A4C8F"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Mesh Audio Controller/Views/DeviceCell.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "13"
+            endingLineNumber = "13"
+            landmarkName = "DeviceCell"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  uuid = "0AF5E072-D77E-4CD6-93C6-CA37989A4C8F - 766e8b2388b06464"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Mesh_Audio_Controller.DeviceCell.deviceIDLabel.getter : __C.UILabel"
+                  moduleName = "Mesh Audio Controller"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jeremywu/SeniorProject/MeshAudioController/Mesh%20Audio%20Controller/Views/DeviceCell.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "13"
+                  endingLineNumber = "13"
+                  offsetFromSymbolStart = "144">
+               </Location>
+               <Location
+                  uuid = "0AF5E072-D77E-4CD6-93C6-CA37989A4C8F - 2f952c0a9c6469f0"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Mesh_Audio_Controller.DeviceCell.deviceIDLabel.setter : __C.UILabel"
+                  moduleName = "Mesh Audio Controller"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jeremywu/SeniorProject/MeshAudioController/Mesh%20Audio%20Controller/Views/DeviceCell.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "13"
+                  endingLineNumber = "13"
+                  offsetFromSymbolStart = "196">
+               </Location>
+               <Location
+                  uuid = "0AF5E072-D77E-4CD6-93C6-CA37989A4C8F - 44cdbeab4e47174b"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Mesh_Audio_Controller.DeviceCell.deviceIDLabel.modify : __C.UILabel"
+                  moduleName = "Mesh Audio Controller"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jeremywu/SeniorProject/MeshAudioController/Mesh%20Audio%20Controller/Views/DeviceCell.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "20">
+               </Location>
+               <Location
+                  uuid = "0AF5E072-D77E-4CD6-93C6-CA37989A4C8F - 248aadc64b002a15"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Mesh_Audio_Controller.DeviceCell.deviceIDLabel.modify : __C.UILabel with unmangled suffix &quot;.resume.0&quot;"
+                  moduleName = "Mesh Audio Controller"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jeremywu/SeniorProject/MeshAudioController/Mesh%20Audio%20Controller/Views/DeviceCell.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "13"
+                  endingLineNumber = "13"
+                  offsetFromSymbolStart = "16">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

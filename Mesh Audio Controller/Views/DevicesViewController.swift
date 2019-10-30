@@ -38,7 +38,7 @@ class DevicesViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 300
+        tableView.estimatedRowHeight = 100
         tableView.register(DeviceCell.self, forCellReuseIdentifier: "DeviceCell")
         tableView.pin(to: view)
     }
@@ -71,16 +71,19 @@ class DevicesViewController: UIViewController {
         print("Scanning for devices")
         //        cbManager.scanForPeripherals(withServices: [BTConstants.ServiceUUID], options: nil)
         cbManager.scanForPeripherals(withServices: nil, options: nil) //for debugging, find all bt devices
-        timer = Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { (timer) in
+        let alert = UIAlertController(title: "Scanning", message: "Scanning for nearby bluetooth devices.", preferredStyle: .alert)
+        self.present(alert, animated: true)
+        timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { (timer) in
             self.stopscan()
         }
     }
     func stopscan(){
+        self.dismiss(animated: true, completion: nil)
         timer.invalidate()
         cbManager.stopScan()
         for (peripheral) in cbPeripherals{
             print(peripheral)
-            cells.append(Device(name: peripheral.name ?? "", id: peripheral.identifier.uuidString, state:"n/a for now"))
+            cells.append(Device(name: peripheral.name ?? "Unknown", id: peripheral.identifier.uuidString, state:"Unknown"))
         }
         self.tableView.reloadData()
     }
@@ -98,6 +101,23 @@ extension DevicesViewController : UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as! DeviceCell
+        let alert = UIAlertController(title: "Connect to Device", message: "Connect to device with id: \(cell.id) and name: \(cell.name)?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "No", style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (UIAlertAction) in
+            self.connectToDevice()
+        }))
+        self.present(alert, animated: true)
+    }
+    
+    func connectToDevice() {
+        
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
     
 }
 

@@ -23,11 +23,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.windowScene = windowScene
         let tabBarController = UITabBarController()
         let devicesViewController = UINavigationController(rootViewController: DevicesViewController())
-        let settingsViewController = UITableViewController()
-        let groupsViewController = UITableViewController()
+        let groupsViewController = UINavigationController(rootViewController: GroupsViewController())
+        let settingsViewController = UINavigationController(rootViewController: SettingsViewController())
         devicesViewController.title = "Devices"
         settingsViewController.title = "Settings"
         groupsViewController.title = "Groups"
+        devicesViewController.tabBarItem = UITabBarItem(title: "Devices", image: UIImage(named: "Devices"), tag: 0)
+        groupsViewController.tabBarItem = UITabBarItem(title: "Groups", image: UIImage(named: "Groups"), tag: 1)
+        settingsViewController.tabBarItem = UITabBarItem(title: "Settings", image: UIImage(named: "Settings"), tag: 2)
         let controllers = [devicesViewController, groupsViewController, settingsViewController]
         tabBarController.viewControllers = controllers
         window?.rootViewController = tabBarController

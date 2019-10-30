@@ -7,3 +7,12 @@
 //
 
 import Foundation
+import UIKit
+
+class GroupsViewController : UITableViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationItem.title = "Groups"
+        navigationController?.navigationBar.prefersLargeTitles = true
+    }
+}
