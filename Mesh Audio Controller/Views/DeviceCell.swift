@@ -49,7 +49,7 @@ class DeviceCell: UITableViewCell {
     func configurePropertiesLabel() {
         propertiesLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         propertiesLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-        propertiesLabel.numberOfLines = 0
+        propertiesLabel.numberOfLines = 3
         propertiesLabel.adjustsFontSizeToFitWidth = true
         propertiesLabel.preferredMaxLayoutWidth = self.frame.size.width
      }

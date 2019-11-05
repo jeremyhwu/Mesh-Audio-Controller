@@ -56,16 +56,27 @@ class DevicesViewController: UIViewController {
     }
     
     @objc func handleRefreshControl(){
-        // Reset vars and scan again
-        self.cbPeripherals = []
-        cells = []
-        tableView.reloadData()
-        self.scan()
+        let alert = UIAlertController(title: "Find new devices?", message: "Would you like to scan for new devices?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "No", style: .default, handler: { (UIAlertAction) in
+            DispatchQueue.main.async {
+                self.tableView.refreshControl?.endRefreshing()
+            }
+        }))
+        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (UIAlertAction) in
+            self.cbPeripherals = []
+            self.cells = []
+            self.tableView.reloadData()
+            self.scan()
+        }))
+        self.present(alert, animated: true)
         // Dismiss the refresh control.
-        DispatchQueue.main.async {
-            self.tableView.refreshControl?.endRefreshing()
-        }
+//       self.tableView.refreshControl?.endRefreshing()
+//            Timer.scheduledTimer(withTimeInterval: 1.75, repeats: false) { (timer) in
+//                 self.tableView.refreshControl?.endRefreshing()
+//            }
+//        }
     }
+    
     
     func scan(){
         print("Scanning for devices")
@@ -81,6 +92,9 @@ class DevicesViewController: UIViewController {
         self.dismiss(animated: true, completion: nil)
         timer.invalidate()
         cbManager.stopScan()
+        DispatchQueue.main.async {
+            self.tableView.refreshControl?.endRefreshing()
+        }
         for (peripheral) in cbPeripherals{
             print(peripheral)
             cells.append(Device(name: peripheral.name ?? "Unknown", id: peripheral.identifier.uuidString, state:"Unknown"))
@@ -103,16 +117,17 @@ extension DevicesViewController : UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as! DeviceCell
+        
         let alert = UIAlertController(title: "Connect to Device", message: "Connect to device with id: \(cell.id) and name: \(cell.name)?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "No", style: .default, handler: nil))
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (UIAlertAction) in
-            self.connectToDevice()
+            self.connectToDevice(peripheral: self.cbPeripherals[indexPath.row])
         }))
         self.present(alert, animated: true)
     }
     
-    func connectToDevice() {
-        
+    func connectToDevice(peripheral: CBPeripheral) {
+        cbManager?.connect(peripheral, options: nil)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -144,13 +159,22 @@ extension DevicesViewController : CBCentralManagerDelegate {
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         print("connected to peripheral")
+        let alert = UIAlertController(title: "Connected to Device", message: "Connected to device with id: \(peripheral.identifier) and name: \(peripheral.name ?? "Unknown")", preferredStyle: .alert)
+               alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+        self.present(alert, animated: true)
     }
     
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         print("failed to connect to peripheral")
+        let alert = UIAlertController(title: "Unable to Connect", message: "Cannot connect to device with id: \(peripheral.identifier) and name: \(peripheral.name ?? "Unknown")", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+        self.present(alert, animated: true)
     }
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
+        let alert = UIAlertController(title: "Disconnected", message: "Disconnected from device with id: \(peripheral.identifier) and name: \(peripheral.name ?? "Unknown")", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+        self.present(alert, animated: true)
         print("disconnected from peripheral")
     }
 }
