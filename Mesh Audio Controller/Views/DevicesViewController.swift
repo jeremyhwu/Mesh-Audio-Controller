@@ -22,8 +22,17 @@ class DevicesViewController: UIViewController {
     var dataSource : UITableViewDataSource?
     var timer = Timer()
     var cells: [Device] = []
+    var connectedPeripherals : [CBPeripheral] = []
     var refreshControl = UIRefreshControl()
-
+    let sections = [
+        "Connected",
+        "Disconnected"
+    ]
+    
+    enum TableSection : Int {
+        case action = 0, Disconnected
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureTableView()
@@ -32,13 +41,14 @@ class DevicesViewController: UIViewController {
     }
     
     func configureTableView() {
+         // Register the custom header view.
+        tableView.register(Header.self, forHeaderFooterViewReuseIdentifier: "sectionHeader")
         navigationItem.title = "Devices"
         navigationController?.navigationBar.prefersLargeTitles = true
         view.addSubview(tableView)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 100
         tableView.register(DeviceCell.self, forCellReuseIdentifier: "DeviceCell")
         tableView.pin(to: view)
     }
@@ -97,13 +107,22 @@ class DevicesViewController: UIViewController {
         }
         for (peripheral) in cbPeripherals{
             print(peripheral)
-            cells.append(Device(name: peripheral.name ?? "Unknown", id: peripheral.identifier.uuidString, state:"Unknown"))
+            cells.append(Device(name: peripheral.name ?? "Unknown", id: peripheral.identifier.uuidString, state:"Unknown", peripheral: peripheral))
         }
         self.tableView.reloadData()
     }
 }
 
 extension DevicesViewController : UITableViewDelegate, UITableViewDataSource {
+    
+     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+       let view = tableView.dequeueReusableHeaderFooterView(withIdentifier:
+                   "sectionHeader") as! Header
+       view.title.text = sections[section]
+
+       return view
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return cells.count
     }
@@ -118,16 +137,30 @@ extension DevicesViewController : UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as! DeviceCell
         
-        let alert = UIAlertController(title: "Connect to Device", message: "Connect to device with id: \(cell.id) and name: \(cell.name)?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "No", style: .default, handler: nil))
-        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (UIAlertAction) in
-            self.connectToDevice(peripheral: self.cbPeripherals[indexPath.row])
-        }))
-        self.present(alert, animated: true)
+        if connectedPeripherals.contains(cell.peripheral!) {
+        let alert = UIAlertController(title: "Disconnect from device?", message: "Disconnect from device with id: \(cell.id) and name: \(cell.name)?", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "No", style: .default, handler: nil))
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (UIAlertAction) in
+                self.disconnectFromDevice(peripheral : self.cbPeripherals[indexPath.row])
+            }))
+            self.present(alert, animated: true)
+        }
+        else{
+            let alert = UIAlertController(title: "Connect to Device", message: "Connect to device with id: \(cell.id) and   name: \(cell.name)?", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "No", style: .default, handler: nil))
+                alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (UIAlertAction) in
+                    self.connectToDevice(peripheral: self.cbPeripherals[indexPath.row])
+                }))
+                self.present(alert, animated: true)
+        }
     }
     
     func connectToDevice(peripheral: CBPeripheral) {
         cbManager?.connect(peripheral, options: nil)
+    }
+    
+    func disconnectFromDevice(peripheral : CBPeripheral){
+        cbManager?.cancelPeripheralConnection(peripheral)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -159,6 +192,7 @@ extension DevicesViewController : CBCentralManagerDelegate {
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         print("connected to peripheral")
+        connectedPeripherals.append(peripheral)
         let alert = UIAlertController(title: "Connected to Device", message: "Connected to device with id: \(peripheral.identifier) and name: \(peripheral.name ?? "Unknown")", preferredStyle: .alert)
                alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
         self.present(alert, animated: true)
@@ -172,6 +206,9 @@ extension DevicesViewController : CBCentralManagerDelegate {
     }
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
+        if let index = connectedPeripherals.firstIndex(of: peripheral) {
+            connectedPeripherals.remove(at: index)
+        }
         let alert = UIAlertController(title: "Disconnected", message: "Disconnected from device with id: \(peripheral.identifier) and name: \(peripheral.name ?? "Unknown")", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
         self.present(alert, animated: true)

@@ -20,6 +20,7 @@
 		1A7EC0C823614AF000B2B136 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7EC0C723614AF000B2B136 /* Device.swift */; };
 		1AB9B70D236A38AB003BF397 /* GroupsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB9B70C236A38AB003BF397 /* GroupsViewController.swift */; };
 		1AB9B70F236A38F5003BF397 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB9B70E236A38F4003BF397 /* SettingsViewController.swift */; };
+		1ABC22B62372262A00E3E6FC /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABC22B52372262A00E3E6FC /* Header.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 		1A7EC0C723614AF000B2B136 /* Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
 		1AB9B70C236A38AB003BF397 /* GroupsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsViewController.swift; sourceTree = "<group>"; };
 		1AB9B70E236A38F4003BF397 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		1ABC22B52372262A00E3E6FC /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,6 +165,7 @@
 				1A7EC0C12361434B00B2B136 /* DeviceCell.swift */,
 				1AB9B70C236A38AB003BF397 /* GroupsViewController.swift */,
 				1AB9B70E236A38F4003BF397 /* SettingsViewController.swift */,
+				1ABC22B52372262A00E3E6FC /* Header.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -297,6 +300,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1ABC22B62372262A00E3E6FC /* Header.swift in Sources */,
 				1A7EC0BB23613FFC00B2B136 /* DevicesViewController.swift in Sources */,
 				1A7EC08F23613E4D00B2B136 /* ViewController.swift in Sources */,
 				1A7EC0C22361434B00B2B136 /* DeviceCell.swift in Sources */,

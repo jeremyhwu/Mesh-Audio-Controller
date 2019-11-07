@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreBluetooth
 
 class DeviceCell: UITableViewCell {
     var deviceNameLabel = UILabel()
@@ -16,20 +17,22 @@ class DeviceCell: UITableViewCell {
     var stackView : UIStackView?
     var name : String
     var id : String
-    var state : String
+    var peripheral : CBPeripheral?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         self.name = ""
-        self.state = ""
         self.id = ""
+        self.peripheral = nil
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         let stackView = UIStackView()
-        addSubview(stackView)
+        let container = UIView()
+        container.addSubview(stackView)
+        addSubview(container)
         stackView.addArrangedSubview(propertiesLabel)
         stackView.addArrangedSubview(deviceNameLabel)
         stackView.addArrangedSubview(deviceIDLabel)
         stackView.addArrangedSubview(deviceStateLabel)
-        configurePropertiesLabel()
+        configureLabels()
     }
     required init?(coder: NSCoder) {
         fatalError("Not implemented yet")
@@ -38,7 +41,9 @@ class DeviceCell: UITableViewCell {
     func set(device: Device) {
         name = device.name
         id = device.id
-        state = device.state
+        peripheral = device.peripheral
+        deviceIDLabel.text = "ID: \(id)"
+        deviceNameLabel.text = "Device: \(name)"
         propertiesLabel.text = """
                                 Device: \(device.name)
                                 State: \(device.state)
@@ -46,11 +51,52 @@ class DeviceCell: UITableViewCell {
                                 """
     }
     
-    func configurePropertiesLabel() {
-        propertiesLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        propertiesLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-        propertiesLabel.numberOfLines = 3
-        propertiesLabel.adjustsFontSizeToFitWidth = true
-        propertiesLabel.preferredMaxLayoutWidth = self.frame.size.width
+    func configureLabels() {
+        deviceIDLabel.font = UIFont.preferredFont(forTextStyle: .headline)
+        deviceIDLabel.adjustsFontForContentSizeCategory = true
+        
+        guard let palatino = UIFont(name: "Palatino", size: 18) else {
+            fatalError("""
+                Failed to load the "Palatino" font.
+                Since this font is included with all versions of iOS that support Dynamic Type, verify that the spelling and casing is correct.
+                """
+            )
+        }
+        deviceNameLabel.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: palatino)
+        deviceNameLabel.adjustsFontForContentSizeCategory = true
+        
+        deviceIDLabel.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor).isActive = true
+        deviceIDLabel.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor).isActive = true
+        deviceNameLabel.leadingAnchor.constraint(equalTo: deviceIDLabel.leadingAnchor).isActive = true
+        deviceNameLabel.trailingAnchor.constraint(equalTo: deviceIDLabel.trailingAnchor).isActive = true
+        
+        deviceIDLabel.firstBaselineAnchor.constraint(equalToSystemSpacingBelow: contentView.layoutMarginsGuide.topAnchor, multiplier: 1).isActive = true
+
+        self.contentView.bottomAnchor.constraint(equalToSystemSpacingBelow: deviceNameLabel.lastBaselineAnchor, multiplier: 1).isActive = true
+
+        deviceNameLabel.firstBaselineAnchor.constraint(equalToSystemSpacingBelow: deviceIDLabel.lastBaselineAnchor, multiplier: 1).isActive = true
+
+        
+        
+        
+//        guard let palatino = UIFont(name: "Palatino", size: 18) else {
+//                  fatalError("""
+//                      Failed to load the "Palatino" font.
+//                      Since this font is included with all versions of iOS that support Dynamic Type, verify that the spelling and casing is correct.
+//                      """
+//                  )
+//              }
+//        propertiesLabel.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: palatino)
+//        propertiesLabel.adjustsFontForContentSizeCategory = true
+//
+//        propertiesLabel.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor).isActive = true
+//        propertiesLabel.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor).isActive = true
+//
+//        propertiesLabel.firstBaselineAnchor.constraint(equalToSystemSpacingBelow: contentView.layoutMarginsGuide.topAnchor, multiplier: 1).isActive = true
+//        propertiesLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+//        propertiesLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+//        propertiesLabel.numberOfLines = 3
+//        propertiesLabel.adjustsFontSizeToFitWidth = true
+//        propertiesLabel.preferredMaxLayoutWidth = self.frame.size.width
      }
 }

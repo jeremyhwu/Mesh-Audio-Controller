@@ -7,10 +7,12 @@
 //
 
 import UIKit
+import CoreBluetooth
 
 struct Device {
     var name : String
     var id : String
     var state : String
+    var peripheral : CBPeripheral
 }
 
