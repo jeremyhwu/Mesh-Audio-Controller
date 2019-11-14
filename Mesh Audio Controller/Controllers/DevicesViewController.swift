@@ -55,6 +55,7 @@ class DevicesViewController: UIViewController {
         tableView.register(Header.self, forHeaderFooterViewReuseIdentifier: "sectionHeader")
         navigationItem.title = "Devices"
         navigationController?.navigationBar.prefersLargeTitles = true
+        
         view.addSubview(tableView)
         tableView.delegate = self
         tableView.dataSource = self

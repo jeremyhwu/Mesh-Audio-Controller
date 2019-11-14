@@ -10,6 +10,8 @@ import Foundation
 import UIKit
 
 class SettingsViewController : UITableViewController {
+    var deviceTab : DevicesViewController!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Settings"

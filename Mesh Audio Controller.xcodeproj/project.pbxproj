@@ -88,6 +88,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1A7A8AFD237E005C00AD6308 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				1A7EC0BA23613FFC00B2B136 /* DevicesViewController.swift */,
+				1AB9B70E236A38F4003BF397 /* SettingsViewController.swift */,
+				1AB9B70C236A38AB003BF397 /* GroupsViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
 		1A7EC07E23613E4D00B2B136 = {
 			isa = PBXGroup;
 			children = (
@@ -111,8 +121,9 @@
 		1A7EC08923613E4D00B2B136 /* Mesh Audio Controller */ = {
 			isa = PBXGroup;
 			children = (
-				1A7EC0C423614AC800B2B136 /* Views */,
 				1A7EC0C323614AC200B2B136 /* Models */,
+				1A7EC0C423614AC800B2B136 /* Views */,
+				1A7A8AFD237E005C00AD6308 /* Controllers */,
 				1A7EC0BC236141E600B2B136 /* Extensions and Utilities */,
 				1A7EC08A23613E4D00B2B136 /* AppDelegate.swift */,
 				1A7EC08C23613E4D00B2B136 /* SceneDelegate.swift */,
@@ -161,10 +172,7 @@
 		1A7EC0C423614AC800B2B136 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				1A7EC0BA23613FFC00B2B136 /* DevicesViewController.swift */,
 				1A7EC0C12361434B00B2B136 /* DeviceCell.swift */,
-				1AB9B70C236A38AB003BF397 /* GroupsViewController.swift */,
-				1AB9B70E236A38F4003BF397 /* SettingsViewController.swift */,
 				1ABC22B52372262A00E3E6FC /* Header.swift */,
 			);
 			path = Views;
