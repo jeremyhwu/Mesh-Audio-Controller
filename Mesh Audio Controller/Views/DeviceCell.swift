@@ -43,11 +43,9 @@ class DeviceCell: UITableViewCell {
         id = device.id
         peripheral = device.peripheral
         deviceIDLabel.text = "ID: \(id)"
-        deviceNameLabel.text = "Device: \(name)"
+        deviceNameLabel.text = "\(name)"
         propertiesLabel.text = """
-                                Device: \(device.name)
-                                State: \(device.state)
-                                ID: \(device.id)
+                                \(device.name)
                                 """
     }
     
@@ -62,6 +60,7 @@ class DeviceCell: UITableViewCell {
                 """
             )
         }
+        deviceNameLabel.translatesAutoresizingMaskIntoConstraints = false
         deviceNameLabel.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: palatino)
         deviceNameLabel.adjustsFontForContentSizeCategory = true
         
