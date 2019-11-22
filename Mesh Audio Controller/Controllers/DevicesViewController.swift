@@ -9,6 +9,10 @@
 import UIKit
 import CoreBluetooth
 
+protocol DeviceDetailDelegate {
+    func updateCell(cell: DeviceCell)
+}
+
 class DevicesViewController: UIViewController {
     var tableView = UITableView()
     var cbManager: CBCentralManager!
@@ -22,8 +26,6 @@ class DevicesViewController: UIViewController {
     var timer = Timer()
 //    var cells: [Device] = []
     var cells = [[Device]]()
-    var connectedPeripherals : [CBPeripheral] = []
-    var disconnectedPeripherals : [CBPeripheral] = []
     var refreshControl = UIRefreshControl()
     let sections = [
         "Connected",
@@ -31,6 +33,12 @@ class DevicesViewController: UIViewController {
     ]
     let connected = 0
     let disconnected = 1
+    private let peripheralState = [
+        "disconnected",
+        "connecting",
+        "connected",
+        "disconnecting"
+    ]
     
     
     enum TableSection : Int {
@@ -55,7 +63,7 @@ class DevicesViewController: UIViewController {
         tableView.register(Header.self, forHeaderFooterViewReuseIdentifier: "sectionHeader")
         navigationItem.title = "Devices"
         navigationController?.navigationBar.prefersLargeTitles = true
-        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(handleRefreshControl))
         view.addSubview(tableView)
         tableView.delegate = self
         tableView.dataSource = self
@@ -118,10 +126,19 @@ class DevicesViewController: UIViewController {
         }
         for (peripheral) in cbPeripherals{
             print(peripheral)
-            cells[disconnected].append(Device(name: peripheral.name ?? "Unknown", id: peripheral.identifier.uuidString, state:"Unknown", peripheral: peripheral))
+            if !cells[connected].contains(where: {$0.id == peripheral.identifier.uuidString}) {
+                cells[disconnected].append(Device(name: peripheral.name ?? "Unknown", id: peripheral.identifier.uuidString, state: peripheralState[peripheral.state.rawValue], peripheral: peripheral))
+            }
         }
         self.tableView.reloadData()
     }
+}
+
+extension DevicesViewController : DeviceDetailDelegate {
+    func updateCell(cell: DeviceCell) {
+        return
+    }
+
 }
 
 extension DevicesViewController : UITableViewDelegate, UITableViewDataSource {
@@ -149,18 +166,25 @@ extension DevicesViewController : UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.cellForRow(at: indexPath) as! DeviceCell
         
         if cells[connected].contains(where: {$0.name == cell.name}) {
-            let alert = UIAlertController(title: "Disconnect from \(cell.name)?", message: "Disconnect from device with id: \(cell.id)?", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "No", style: .default, handler: nil))
-            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (UIAlertAction) in
-                let peripheral = self.cells[indexPath.section][indexPath.row]
-                if let index = self.cbPeripherals.firstIndex(
-                    where: {$0.name == peripheral.name && $0.identifier.uuidString == peripheral.id}) {
-                    self.cells[self.connected].remove(at: indexPath.row)
-                    self.cells[self.disconnected].append(peripheral)
-                    self.disconnectFromDevice(peripheral: self.cbPeripherals[index])
-                }
-            }))
-            self.present(alert, animated: true)
+            let vc = DeviceDetailController()
+            vc.delegate = self
+            vc.cell = cell
+            vc.peripheral = cell.peripheral
+            let deviceDetailController = UINavigationController(rootViewController: vc)
+            
+            self.present(deviceDetailController, animated: true, completion: nil)
+//            let alert = UIAlertController(title: "Disconnect from \(cell.name)?", message: "Disconnect from device with id: \(cell.id)?", preferredStyle: .alert)
+//            alert.addAction(UIAlertAction(title: "No", style: .default, handler: nil))
+//            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (UIAlertAction) in
+//                let peripheral = self.cells[indexPath.section][indexPath.row]
+//                if let index = self.cbPeripherals.firstIndex(
+//                    where: {$0.name == peripheral.name && $0.identifier.uuidString == peripheral.id}) {
+//                    self.cells[self.connected].remove(at: indexPath.row)
+//                    self.cells[self.disconnected].append(peripheral)
+//                    self.disconnectFromDevice(peripheral: self.cbPeripherals[index])
+//                }
+//            }))
+//            self.present(alert, animated: true)
         }
         else {
             let alert = UIAlertController(title: "Connect to \(cell.name)?", message: "Connect to device with id: \(cell.id)?", preferredStyle: .alert)
@@ -217,7 +241,6 @@ extension DevicesViewController : CBCentralManagerDelegate {
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         print("connected to peripheral")
-        connectedPeripherals.append(peripheral)
         
         // Move from disconnected to connected
         if let index = cells[disconnected].firstIndex(where: {$0.name == peripheral.name}) {
