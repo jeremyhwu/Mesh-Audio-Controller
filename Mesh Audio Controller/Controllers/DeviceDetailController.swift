@@ -9,44 +9,181 @@
 import UIKit
 import CoreBluetooth
 
+private let reuseIdentifier = "SettingsCell"
+
 class DeviceDetailController: UITableViewController {
     var delegate : DeviceDetailDelegate?
     var cell : DeviceCell?
     var peripheral : CBPeripheral?
-    
+    var cells  = [[Device]]()
+    var tableData = [[SettingsCell]]()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         configureTable()
     }
-    
+
     func configureUI(){
     self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(handleDone))
-//    self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(handleCancel))
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Disconnect", style: .done, target: self, action: #selector(handleDisconnect))
+    self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Disconnect", style: .done, target: self, action: #selector(handleDisconnect))
     view.backgroundColor = .white
     }
-    
+
     func configureTable(){
-        
+        self.tableView.tableHeaderView = DeviceInfoHeader(frame: self.tableView.frame)
     }
-    
+
     @objc func handleDone() {
         self.dismiss(animated: true, completion: nil)
     }
-    
+
     @objc func handleDisconnect() {
         let alert = UIAlertController(title: "Disconnect?", message: "Disconnect from this device?", preferredStyle: .alert)
-//                   alert.addAction(UIAlertAction(title: "No", style: .default, handler: nil))
-//                   alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (UIAlertAction) in
-//                       let peripheral = self.cells[indexPath.section][indexPath.row]
-//                       if let index = self.cbPeripherals.firstIndex(
-//                           where: {$0.name == peripheral.name && $0.identifier.uuidString == peripheral.id}) {
-//                           self.cells[self.connected].remove(at: indexPath.row)
-//                           self.cells[self.disconnected].append(peripheral)
-//                           self.disconnectFromDevice(peripheral: self.cbPeripherals[index])
-//                       }
-        self.dismiss(animated: true, completion: nil)
+        alert.addAction(UIAlertAction(title: "No", style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (UIAlertAction) in
+            self.delegate?.disconnect(peripheral: self.peripheral!, controller: self)
+        }))
+        self.present(alert, animated: true)
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        let cell = tableView.dequeueReusableCell(withIdentifier: "TableCell")
+        return UITableViewCell()
+    }
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        return
+    }
+
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = UIView()
+        let title = UILabel()
+        title.font = UIFont.boldSystemFont(ofSize: 16)
+        title.textColor = .white
+        title.text = SettingsSection(rawValue: section)?.description
+        view.addSubview(title)
+        title.translatesAutoresizingMaskIntoConstraints = false
+        title.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        title.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16).isActive = true
+        
+        return view
+    }
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        return tableData[section].count
+        return 1
+    }
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return SettingsSection.allCases.count
     }
 }
 
+//
+//class DeviceDetailController: UIViewController {
+//
+//    // MARK: - Properties
+//
+//    var tableView: UITableView!
+//    var deviceInfoHeader: DeviceInfoHeader!
+//
+//    // MARK: - Init
+//
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+//        configureUI()
+//    }
+//
+//    // MARK: - Helper Functions
+//
+//    func configureTableView() {
+//        tableView = UITableView()
+//        tableView.delegate = self
+//        tableView.dataSource = self
+//        tableView.rowHeight = 60
+//
+//        tableView.register(SettingsCell.self, forCellReuseIdentifier: reuseIdentifier)
+//        view.addSubview(tableView)
+//        tableView.frame = view.frame
+//
+//        let frame = CGRect(x: 0, y: 88, width: view.frame.width, height: 100)
+//        deviceInfoHeader = DeviceInfoHeader(frame: frame)
+//        tableView.tableHeaderView = deviceInfoHeader
+//        tableView.tableFooterView = UIView()
+//    }
+//
+//    func configureUI() {
+//        configureTableView()
+//
+//        navigationController?.navigationBar.prefersLargeTitles = true
+//        navigationController?.navigationBar.isTranslucent = false
+//        navigationController?.navigationBar.barStyle = .black
+//        navigationController?.navigationBar.barTintColor = UIColor(red: 55/255, green: 120/255, blue: 250/255, alpha: 1)
+//        navigationItem.title = "Settings"
+//    }
+//
+//}
+//
+//extension ViewController: UITableViewDelegate, UITableViewDataSource {
+//
+//    func numberOfSections(in tableView: UITableView) -> Int {
+//        return SettingsSection.allCases.count
+//    }
+//
+//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//
+//        guard let section = SettingsSection(rawValue: section) else { return 0 }
+//
+//        switch section {
+//        case .Social: return SocialOptions.allCases.count
+//        case .Communications: return CommunicationOptions.allCases.count
+//        }
+//    }
+//
+//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        let view = UIView()
+//        view.backgroundColor = UIColor(red: 55/255, green: 120/255, blue: 250/255, alpha: 1)
+//
+//        print("Section is \(section)")
+//
+//        let title = UILabel()
+//        title.font = UIFont.boldSystemFont(ofSize: 16)
+//        title.textColor = .white
+//        title.text = SettingsSection(rawValue: section)?.description
+//        view.addSubview(title)
+//        title.translatesAutoresizingMaskIntoConstraints = false
+//        title.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+//        title.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16).isActive = true
+//
+//        return view
+//    }
+//
+//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//        return 40
+//    }
+//
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! SettingsCell
+//        guard let section = SettingsSection(rawValue: indexPath.section) else { return UITableViewCell() }
+//
+//        switch section {
+//        case .Social:
+//            let social = SocialOptions(rawValue: indexPath.row)
+//            cell.sectionType = social
+//        case .Communications:
+//            let communications = CommunicationOptions(rawValue: indexPath.row)
+//            cell.sectionType = communications
+//        }
+//
+//        return cell
+//    }
+//
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        guard let section = SettingsSection(rawValue: indexPath.section) else { return }
+//
+//        switch section {
+//        case .Social:
+//            print(SocialOptions(rawValue: indexPath.row)?.description)
+//        case .Communications:
+//            print(CommunicationOptions(rawValue: indexPath.row)?.description)
+//        }
+//    }
+//}

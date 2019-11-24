@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A647383238A54CD00E6D389 /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A647382238A54CD00E6D389 /* SettingsCell.swift */; };
+		1A647385238A54E700E6D389 /* DeviceInfoHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A647384238A54E700E6D389 /* DeviceInfoHeader.swift */; };
+		1A647389238A585000E6D389 /* SettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A647388238A585000E6D389 /* SettingsSection.swift */; };
 		1A7A8AFF237E04C300AD6308 /* DeviceDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7A8AFE237E04C300AD6308 /* DeviceDetailController.swift */; };
 		1A7EC08B23613E4D00B2B136 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7EC08A23613E4D00B2B136 /* AppDelegate.swift */; };
 		1A7EC08D23613E4D00B2B136 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7EC08C23613E4D00B2B136 /* SceneDelegate.swift */; };
@@ -42,6 +45,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1A647382238A54CD00E6D389 /* SettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCell.swift; sourceTree = "<group>"; };
+		1A647384238A54E700E6D389 /* DeviceInfoHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoHeader.swift; sourceTree = "<group>"; };
+		1A647388238A585000E6D389 /* SettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSection.swift; sourceTree = "<group>"; };
 		1A7A8AFE237E04C300AD6308 /* DeviceDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDetailController.swift; sourceTree = "<group>"; };
 		1A7EC08723613E4D00B2B136 /* Mesh Audio Controller.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mesh Audio Controller.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A7EC08A23613E4D00B2B136 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -94,9 +100,9 @@
 			isa = PBXGroup;
 			children = (
 				1A7EC0BA23613FFC00B2B136 /* DevicesViewController.swift */,
+				1A7A8AFE237E04C300AD6308 /* DeviceDetailController.swift */,
 				1AB9B70E236A38F4003BF397 /* SettingsViewController.swift */,
 				1AB9B70C236A38AB003BF397 /* GroupsViewController.swift */,
-				1A7A8AFE237E04C300AD6308 /* DeviceDetailController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -168,6 +174,7 @@
 			isa = PBXGroup;
 			children = (
 				1A7EC0C723614AF000B2B136 /* Device.swift */,
+				1A647388238A585000E6D389 /* SettingsSection.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -176,7 +183,9 @@
 			isa = PBXGroup;
 			children = (
 				1A7EC0C12361434B00B2B136 /* DeviceCell.swift */,
+				1A647382238A54CD00E6D389 /* SettingsCell.swift */,
 				1ABC22B52372262A00E3E6FC /* Header.swift */,
+				1A647384238A54E700E6D389 /* DeviceInfoHeader.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -311,8 +320,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A647389238A585000E6D389 /* SettingsSection.swift in Sources */,
 				1ABC22B62372262A00E3E6FC /* Header.swift in Sources */,
 				1A7A8AFF237E04C300AD6308 /* DeviceDetailController.swift in Sources */,
+				1A647385238A54E700E6D389 /* DeviceInfoHeader.swift in Sources */,
+				1A647383238A54CD00E6D389 /* SettingsCell.swift in Sources */,
 				1A7EC0BB23613FFC00B2B136 /* DevicesViewController.swift in Sources */,
 				1A7EC08F23613E4D00B2B136 /* ViewController.swift in Sources */,
 				1A7EC0C22361434B00B2B136 /* DeviceCell.swift in Sources */,
