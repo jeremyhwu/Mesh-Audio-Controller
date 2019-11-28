@@ -21,6 +21,8 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
     private var characteristicTable : [CBUUID] = []
     let service1 = CBUUID(string: "C3093770-1A43-4F1C-ABCC-24A448FC6218")
     let service2 = CBUUID(string: "CEEF1D13-633C-4AC4-8B16-BC4D392551AD")
+    let testService = CBUUID(string: "bf280f00-af11-41dd-a122-573cdb92b56c")
+    let testCharacteristic = CBUUID(string: "9886ca1d-4ad4-41fb-9c85-8aad722b0e47")
     let hello = CBUUID(string: "9FEE1609-4B66-4DCC-87B0-E0DD2415E892")
     let world = CBUUID(string: "4B9A381D-90E4-41DD-AA10-83746A4B5F1F")
     var delegate : DeviceDetailDelegate?
@@ -40,8 +42,8 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
     }
     
     func configureTable(){
-        self.serviceTable = [service1, service2]
-        self.characteristicTable = [hello, world]
+        self.serviceTable = [service1, service2, testService]
+        self.characteristicTable = [hello, world, testCharacteristic]
         self.tableView.register(SettingsCell.self, forCellReuseIdentifier: reuseIdentifier)
         self.tableView.register(Header.self, forHeaderFooterViewReuseIdentifier: "sectionHeader")
         let infoHeader = DeviceInfoHeader()
@@ -81,9 +83,13 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
             }
         }
     }
+    func sendData(data: NSData){
+        
+        //        peripheral?.writeValue(data: data, for: CBDescriptor())
+    }
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
-        print(characteristic.value)
+        print(characteristic.value as Any)
         switch characteristic.uuid {
         case hello:
             print("hello: uuid: \(characteristic.uuid)")
@@ -96,7 +102,7 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor characteristic: CBCharacteristic, error: Error?) {
         // Notification has started
-       if (characteristic.isNotifying) {
+        if (characteristic.isNotifying) {
             print("Notification began on \(characteristic)");
         }
     }
@@ -106,7 +112,7 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
         print(characteristic)
     }
-
+    
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         guard let section = SettingsSection(rawValue: indexPath.section) else { return 50 }
@@ -148,15 +154,10 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
         return cell
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = self.tableView.cellForRow(at: indexPath)
         guard let section = SettingsSection(rawValue: indexPath.section) else { return }
         switch section {
         case .DeviceInfo:
             let deviceInfo = DeviceInfo(rawValue: indexPath.row)
-            if (deviceInfo?.action != nil){
-                guard let action = deviceInfo?.action! else {break}
-                self.present(action, animated: true)
-            }
         case .Settings:
             let settings = Settings(rawValue: indexPath.row)
             switch settings {
@@ -179,13 +180,23 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
                 self.present(alert, animated: true)
             case .none:
                 return
+            case .some(.sendData):
+                let alert = UIAlertController(title: "Send new data?", message: nil, preferredStyle: .alert)
+                alert.addTextField { (textField) in
+                    textField.placeholder = "Enter data"
+                }
+                alert.addAction(UIAlertAction(title: "No", style: .default, handler: nil))
+                alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action: UIAlertAction) -> Void in
+                    let textField = alert.textFields![0]
+                    let text = textField.text?.data(using: .utf8)
+                    if text != nil {
+                        self.sendData(data: NSData(data: text!))
+                    }
+                }))
+                self.present(alert, animated: true)
             }
         case .Devices:
             let devices = Devices(rawValue: indexPath.row)
-            if (devices?.action != nil){
-                guard let action = devices?.action! else {break}
-                self.present(action, animated: true)
-            }
         }
     }
     

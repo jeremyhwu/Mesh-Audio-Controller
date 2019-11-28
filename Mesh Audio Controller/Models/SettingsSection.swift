@@ -40,18 +40,13 @@ enum DeviceInfo: Int, CaseIterable, SectionType {
         case .info: return ""
         }
     }
-    var action: UIAlertController? {
-        switch self {
-        default:
-            return nil
-        }
-    }
 }
 
 enum Settings: Int, CaseIterable, SectionType {
     case rename
     case mute
     case getData
+    case sendData
     
     var containsSwitch: Bool {
         switch self {
@@ -66,25 +61,7 @@ enum Settings: Int, CaseIterable, SectionType {
         case .rename: return "Rename Device"
         case .mute: return "Mute Device"
         case .getData: return "Grab new data"
-        }
-    }
-    var action: UIAlertController? {
-        switch self {
-        case .rename:
-            let alert = UIAlertController(title: "Rename this device?", message: nil, preferredStyle: .alert)
-            alert.addTextField { (textField) in
-                textField.placeholder = "Enter a new name"
-            }
-            alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
-            alert.addAction(UIAlertAction(title: "Rename", style: .default, handler: nil))
-            return alert
-        case .getData:
-            let alert = UIAlertController(title: "Get data?", message: nil, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "No", style: .default, handler: nil))
-            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: nil))
-            return alert
-        default:
-            return nil
+        case .sendData: return "Send data"
         }
     }
 }
@@ -103,28 +80,6 @@ enum Devices: Int, CaseIterable, SectionType {
         case .addDevice: return "Add Device"
         case .removeDevice: return "Remove Device"
         case .device: return ""
-        }
-    }
-    var action: UIAlertController? {
-        switch self {
-        case .addDevice:
-            let alert = UIAlertController(title: "Add a new child device?", message: nil, preferredStyle: .alert)
-            alert.addTextField { (textField) in
-                textField.placeholder = "Enter a new name"
-            }
-            alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
-            alert.addAction(UIAlertAction(title: "Rename", style: .default, handler: nil))
-            return alert
-        case .removeDevice:
-            let alert = UIAlertController(title: "Remove a child device?", message: nil, preferredStyle: .alert)
-            alert.addTextField { (textField) in
-                textField.placeholder = "Enter a new name"
-            }
-            alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
-            alert.addAction(UIAlertAction(title: "Rename", style: .default, handler: nil))
-            return alert
-        default:
-            return nil
         }
     }
 }
