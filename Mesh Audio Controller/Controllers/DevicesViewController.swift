@@ -67,7 +67,7 @@ class DevicesViewController: UIViewController {
         view.addSubview(tableView)
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.rowHeight = UITableView.automaticDimension
+        tableView.rowHeight = 50
         tableView.register(DeviceCell.self, forCellReuseIdentifier: "DeviceCell")
         tableView.pin(to: view)
     }
@@ -274,6 +274,9 @@ extension DevicesViewController : CBPeripheralDelegate {
     }
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         return
+    }
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
+        print(peripheral.services)
     }
 }
 

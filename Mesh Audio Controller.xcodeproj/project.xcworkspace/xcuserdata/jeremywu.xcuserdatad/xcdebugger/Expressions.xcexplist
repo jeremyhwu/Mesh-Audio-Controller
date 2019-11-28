@@ -6,6 +6,12 @@
          contextName = "DevicesViewController.connectToDevice(peripheral:):DevicesViewController.swift">
       </ContextState>
       <ContextState
+         contextName = "DeviceDetailController.tableView(_:viewForHeaderInSection:):DeviceDetailController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in DevicesViewController.centralManager(_:didConnect:):DevicesViewController.swift">
+      </ContextState>
+      <ContextState
          contextName = "DeviceDetailController.configureTable():DeviceDetailController.swift">
          <PersistentStrings>
             <PersistentString
@@ -15,6 +21,11 @@
       </ContextState>
       <ContextState
          contextName = "DeviceInfoHeader.init(frame:):DeviceInfoHeader.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "DevicesViewController.centralManager(_:didConnect:):DevicesViewController.swift">
