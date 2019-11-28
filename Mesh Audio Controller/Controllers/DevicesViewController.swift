@@ -15,6 +15,8 @@ protocol DeviceDetailDelegate {
 }
 
 class DevicesViewController: UIViewController {
+    fileprivate var bluetoothManager = BluetoothManager.sharedManager
+    
     var tableView = UITableView()
     var cbManager: CBCentralManager!
     var peripheralManager: CBPeripheralManager!

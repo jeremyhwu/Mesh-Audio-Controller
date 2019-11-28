@@ -21,8 +21,8 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
     private var characteristicTable : [CBUUID] = []
     let service1 = CBUUID(string: "C3093770-1A43-4F1C-ABCC-24A448FC6218")
     let service2 = CBUUID(string: "CEEF1D13-633C-4AC4-8B16-BC4D392551AD")
-    let testService = CBUUID(string: "bf280f00-af11-41dd-a122-573cdb92b56c")
-    let testCharacteristic = CBUUID(string: "9886ca1d-4ad4-41fb-9c85-8aad722b0e47")
+    let testService = CBUUID(string: "3f403394-0000-1000-8000-00805f9b34fb")
+    let testCharacteristic = CBUUID(string: "3f40350c-0000-1000-8000-00805f9b34fb")
     let hello = CBUUID(string: "9FEE1609-4B66-4DCC-87B0-E0DD2415E892")
     let world = CBUUID(string: "4B9A381D-90E4-41DD-AA10-83746A4B5F1F")
     var delegate : DeviceDetailDelegate?
@@ -73,21 +73,24 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
         guard let services = peripheral?.services else { return }
         for service in services {
             print(service.uuid)
-            if self.serviceTable.contains(service.uuid){
+//            if self.serviceTable.contains(service.uuid){
                 peripheral?.discoverCharacteristics(nil, for: service)
                 guard let characteristics = service.characteristics else { return }
                 for characterstic in characteristics {
-                    peripheral?.discoverDescriptors(for: characterstic)
+                    print("here")
                     peripheral?.setNotifyValue(true, for: characterstic)
+                    peripheral?.discoverDescriptors(for: characterstic)
+                    peripheral?.readValue(for: characterstic)
+                    print(characterstic.value)
+                    print(characterstic.descriptors)
                 }
-            }
+//            }
         }
     }
     func sendData(data: NSData){
-        
         //        peripheral?.writeValue(data: data, for: CBDescriptor())
     }
-    
+        
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         print(characteristic.value as Any)
         switch characteristic.uuid {
@@ -102,15 +105,22 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor characteristic: CBCharacteristic, error: Error?) {
         // Notification has started
+        print("didUpdateNotificationStateFor")
         if (characteristic.isNotifying) {
             print("Notification began on \(characteristic)");
         }
     }
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor descriptor: CBDescriptor, error: Error?) {
+        print("didUpdateValueFor")
         print(descriptor)
     }
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
+        print("didWriteValueFor")
         print(characteristic)
+    }
+    
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
+          print("characteristic discovered")
     }
     
     
