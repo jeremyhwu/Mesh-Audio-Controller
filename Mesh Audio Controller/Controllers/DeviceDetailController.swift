@@ -17,11 +17,12 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
         "connected",
         "disconnecting"
     ]
-    private let serviceTable = [
-        CBUUID(string: "0x180D"),
-        CBUUID(string: "0x180D")
-    ]
-    
+    private var serviceTable : [CBUUID] = []
+    private var characteristicTable : [CBUUID] = []
+    let service1 = CBUUID(string: "C3093770-1A43-4F1C-ABCC-24A448FC6218")
+    let service2 = CBUUID(string: "CEEF1D13-633C-4AC4-8B16-BC4D392551AD")
+    let hello = CBUUID(string: "9FEE1609-4B66-4DCC-87B0-E0DD2415E892")
+    let world = CBUUID(string: "4B9A381D-90E4-41DD-AA10-83746A4B5F1F")
     var delegate : DeviceDetailDelegate?
     var cell : DeviceCell?
     var peripheral : CBPeripheral?
@@ -39,6 +40,8 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
     }
     
     func configureTable(){
+        self.serviceTable = [service1, service2]
+        self.characteristicTable = [hello, world]
         self.tableView.register(SettingsCell.self, forCellReuseIdentifier: reuseIdentifier)
         self.tableView.register(Header.self, forHeaderFooterViewReuseIdentifier: "sectionHeader")
         let infoHeader = DeviceInfoHeader()
@@ -67,6 +70,7 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
         peripheral?.discoverServices(nil)
         guard let services = peripheral?.services else { return }
         for service in services {
+            print(service.uuid)
             if self.serviceTable.contains(service.uuid){
                 peripheral?.discoverCharacteristics(nil, for: service)
                 guard let characteristics = service.characteristics else { return }
@@ -79,10 +83,30 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
     }
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
-        let alert = UIAlertController(title: "Data received", message: "\(String(describing: characteristic.value))", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
-        self.present(alert, animated: true)
+        print(characteristic.value)
+        switch characteristic.uuid {
+        case hello:
+            print("hello: uuid: \(characteristic.uuid)")
+        case world:
+            print("world: uuid: \(characteristic.uuid)")
+        default:
+            break
+        }
     }
+    
+    func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor characteristic: CBCharacteristic, error: Error?) {
+        // Notification has started
+       if (characteristic.isNotifying) {
+            print("Notification began on \(characteristic)");
+        }
+    }
+    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor descriptor: CBDescriptor, error: Error?) {
+        print(descriptor)
+    }
+    func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
+        print(characteristic)
+    }
+
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         guard let section = SettingsSection(rawValue: indexPath.section) else { return 50 }

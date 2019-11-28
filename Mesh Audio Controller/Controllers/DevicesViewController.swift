@@ -231,9 +231,6 @@ extension DevicesViewController : CBCentralManagerDelegate {
         print("connected to peripheral")
         
         // Move from disconnected to connected
-        peripheral.discoverServices(nil)
-        print(peripheral.services as Any)
-        print(peripheral.state)
         if let index = cells[disconnected].firstIndex(where: {$0.name == peripheral.name && $0.id == peripheral.identifier.uuidString}) {
             cells[connected].append(cells[disconnected][index])
             cells[disconnected].remove(at: index)
