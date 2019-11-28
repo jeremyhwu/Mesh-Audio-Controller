@@ -9,20 +9,23 @@
 import UIKit
 import CoreBluetooth
 
-private let reuseIdentifier = "SettingsCell"
-private let peripheralState = [
-    "disconnected",
-    "connecting",
-    "connected",
-    "disconnecting"
-]
-
-class DeviceDetailController: UITableViewController {
+class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
+    private let reuseIdentifier = "SettingsCell"
+    private let peripheralState = [
+        "disconnected",
+        "connecting",
+        "connected",
+        "disconnecting"
+    ]
+    private let serviceTable = [
+        CBUUID(string: "0x180D"),
+        CBUUID(string: "0x180D")
+    ]
+    
     var delegate : DeviceDetailDelegate?
     var cell : DeviceCell?
     var peripheral : CBPeripheral?
-    var cells  = [[Device]]()
-    var tableData = [[SettingsCell]]()
+    var characteristics : [CBCharacteristic]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,6 +59,28 @@ class DeviceDetailController: UITableViewController {
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (UIAlertAction) in
             self.delegate?.disconnect(peripheral: self.peripheral!, controller: self)
         }))
+        self.present(alert, animated: true)
+    }
+    
+    //GATT Services
+    func getData() {
+        peripheral?.discoverServices(nil)
+        guard let services = peripheral?.services else { return }
+        for service in services {
+            if self.serviceTable.contains(service.uuid){
+                peripheral?.discoverCharacteristics(nil, for: service)
+                guard let characteristics = service.characteristics else { return }
+                for characterstic in characteristics {
+                    peripheral?.discoverDescriptors(for: characterstic)
+                    peripheral?.setNotifyValue(true, for: characterstic)
+                }
+            }
+        }
+    }
+    
+    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
+        let alert = UIAlertController(title: "Data received", message: "\(String(describing: characteristic.value))", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
         self.present(alert, animated: true)
     }
     
@@ -99,6 +124,7 @@ class DeviceDetailController: UITableViewController {
         return cell
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = self.tableView.cellForRow(at: indexPath)
         guard let section = SettingsSection(rawValue: indexPath.section) else { return }
         switch section {
         case .DeviceInfo:
@@ -109,9 +135,26 @@ class DeviceDetailController: UITableViewController {
             }
         case .Settings:
             let settings = Settings(rawValue: indexPath.row)
-            if (settings?.action != nil){
-                guard let action = settings?.action! else {break}
-                self.present(action, animated: true)
+            switch settings {
+            case .rename:
+                let alert = UIAlertController(title: "Rename this device?", message: nil, preferredStyle: .alert)
+                alert.addTextField { (textField) in
+                    textField.placeholder = "Enter a new name"
+                }
+                alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+                alert.addAction(UIAlertAction(title: "Rename", style: .default, handler: nil))
+                self.present(alert, animated: true)
+            case .mute:
+                return
+            case .getData:
+                let alert = UIAlertController(title: "Grab new data?", message: nil, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "No", style: .default, handler: nil))
+                alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action: UIAlertAction) -> Void in
+                    self.getData()
+                }))
+                self.present(alert, animated: true)
+            case .none:
+                return
             }
         case .Devices:
             let devices = Devices(rawValue: indexPath.row)

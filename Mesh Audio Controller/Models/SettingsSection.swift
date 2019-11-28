@@ -51,6 +51,7 @@ enum DeviceInfo: Int, CaseIterable, SectionType {
 enum Settings: Int, CaseIterable, SectionType {
     case rename
     case mute
+    case getData
     
     var containsSwitch: Bool {
         switch self {
@@ -64,6 +65,7 @@ enum Settings: Int, CaseIterable, SectionType {
         switch self {
         case .rename: return "Rename Device"
         case .mute: return "Mute Device"
+        case .getData: return "Grab new data"
         }
     }
     var action: UIAlertController? {
@@ -75,6 +77,11 @@ enum Settings: Int, CaseIterable, SectionType {
             }
             alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
             alert.addAction(UIAlertAction(title: "Rename", style: .default, handler: nil))
+            return alert
+        case .getData:
+            let alert = UIAlertController(title: "Get data?", message: nil, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "No", style: .default, handler: nil))
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: nil))
             return alert
         default:
             return nil
@@ -109,13 +116,13 @@ enum Devices: Int, CaseIterable, SectionType {
             alert.addAction(UIAlertAction(title: "Rename", style: .default, handler: nil))
             return alert
         case .removeDevice:
-        let alert = UIAlertController(title: "Remove a child device?", message: nil, preferredStyle: .alert)
-        alert.addTextField { (textField) in
-            textField.placeholder = "Enter a new name"
-        }
-        alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
-        alert.addAction(UIAlertAction(title: "Rename", style: .default, handler: nil))
-        return alert
+            let alert = UIAlertController(title: "Remove a child device?", message: nil, preferredStyle: .alert)
+            alert.addTextField { (textField) in
+                textField.placeholder = "Enter a new name"
+            }
+            alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+            alert.addAction(UIAlertAction(title: "Rename", style: .default, handler: nil))
+            return alert
         default:
             return nil
         }

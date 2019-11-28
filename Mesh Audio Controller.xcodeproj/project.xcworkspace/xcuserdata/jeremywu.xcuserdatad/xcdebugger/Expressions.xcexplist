@@ -3,19 +3,10 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "DevicesViewController.connectToDevice(peripheral:):DevicesViewController.swift">
-      </ContextState>
-      <ContextState
-         contextName = "DeviceDetailController.tableView(_:viewForHeaderInSection:):DeviceDetailController.swift">
-      </ContextState>
-      <ContextState
-         contextName = "closure #1 in DevicesViewController.centralManager(_:didConnect:):DevicesViewController.swift">
-      </ContextState>
-      <ContextState
-         contextName = "DeviceDetailController.configureTable():DeviceDetailController.swift">
+         contextName = "DeviceDetailController.tableView(_:didSelectRowAt:):DeviceDetailController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "self.tableView.tableHeaderView">
+               value = "deviceInfo">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -28,12 +19,29 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "DevicesViewController.connectToDevice(peripheral:):DevicesViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "DeviceDetailController.configureTable():DeviceDetailController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.tableView.tableHeaderView">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in DevicesViewController.centralManager(_:didConnect:):DevicesViewController.swift">
+      </ContextState>
+      <ContextState
          contextName = "DevicesViewController.centralManager(_:didConnect:):DevicesViewController.swift">
          <PersistentStrings>
             <PersistentString
                value = "self.services">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "DeviceDetailController.tableView(_:viewForHeaderInSection:):DeviceDetailController.swift">
       </ContextState>
    </ContextStates>
 </VariablesViewState>

@@ -170,7 +170,6 @@ extension DevicesViewController : UITableViewDelegate, UITableViewDataSource {
             vc.delegate = self
             vc.cell = cell
             vc.peripheral = cell.peripheral
-            vc.cells = self.cells
             let deviceDetailController = UINavigationController(rootViewController: vc)
             self.present(deviceDetailController, animated: true, completion: nil)
         }
@@ -196,7 +195,6 @@ extension DevicesViewController : UITableViewDelegate, UITableViewDataSource {
     
     func disconnectFromDevice(peripheral : CBPeripheral){
         cbManager?.cancelPeripheralConnection(peripheral)
-        //remove from cbperipherals and scan again. Apparently not supposed to use same peripheral twice
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -273,15 +271,6 @@ extension DevicesViewController : CBCentralManagerDelegate {
 }
 
 extension DevicesViewController : CBPeripheralDelegate {
-    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
-        return
-    }
-    func peripheralManagerDidStartAdvertising(_ peripheral: CBPeripheralManager, error: Error?) {
-        return
-    }
-    func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
-        return
-    }
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         print(peripheral.services as Any)
     }
