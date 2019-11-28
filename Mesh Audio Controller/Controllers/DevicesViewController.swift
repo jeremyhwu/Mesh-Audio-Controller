@@ -119,7 +119,6 @@ class DevicesViewController: UIViewController {
             self.tableView.refreshControl?.endRefreshing()
         }
         for (peripheral) in cbPeripherals{
-            print(peripheral)
             if !cells[connected].contains(where: {$0.id == peripheral.identifier.uuidString}) {
                 cells[disconnected].append(Device(name: peripheral.name ?? "Unknown", id: peripheral.identifier.uuidString, state: peripheralState[peripheral.state.rawValue], peripheral: peripheral))
             }
@@ -142,11 +141,13 @@ extension DevicesViewController : DeviceDetailDelegate {
 extension DevicesViewController : UITableViewDelegate, UITableViewDataSource {
     
      func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-       let view = tableView.dequeueReusableHeaderFooterView(withIdentifier:
+        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier:
                    "sectionHeader") as! Header
-       view.title.text = sections[section]
-
-       return view
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = UIColor(red: 55/255, green: 120/255, blue: 250/255, alpha: 1)
+        view.backgroundView = backgroundView
+        view.title.text = sections[section]
+        return view
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -259,7 +260,13 @@ extension DevicesViewController : CBCentralManagerDelegate {
         }
         self.tableView.reloadData()
         let alert = UIAlertController(title: "Disconnected from \(peripheral.name ?? "Unknown")", message: "Disconnected from device with id: \(peripheral.identifier).", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+        let action = UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: { (action: UIAlertAction) -> Void in
+            self.cbPeripherals = []
+            self.cells[self.disconnected] = [Device]()
+            self.tableView.reloadData()
+            self.scan()
+        })
+        alert.addAction(action)
         self.present(alert, animated: true)
         print("disconnected from peripheral")
     }
@@ -276,7 +283,7 @@ extension DevicesViewController : CBPeripheralDelegate {
         return
     }
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
-        print(peripheral.services)
+        print(peripheral.services as Any)
     }
 }
 

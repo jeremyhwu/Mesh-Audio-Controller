@@ -4,8 +4,6 @@
 <dict>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Use bluetooth to discover, connect to, and share information with nearby devices</string>
-	<key>UIUserInterfaceStyle</key>
-	<string>Light</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>

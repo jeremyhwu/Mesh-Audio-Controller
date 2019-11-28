@@ -24,8 +24,8 @@ enum SettingsSection: Int, CaseIterable, CustomStringConvertible {
     }
 }
 
-enum DeviceSettings: Int, CaseIterable, SectionType {
-    case rename
+enum DeviceInfo: Int, CaseIterable, SectionType {
+    case info
     
     var containsSwitch: Bool {
         return false
@@ -33,44 +33,40 @@ enum DeviceSettings: Int, CaseIterable, SectionType {
     
     var description: String {
         switch self {
-        case .rename: return "Rename Device"
+        case .info: return "Info"
     }
     }
 }
 
-//
-//enum SocialOptions: Int, CaseIterable, SectionType {
-//    case editProfile
-//    case logout
-//    
-//    var containsSwitch: Bool { return false }
-//    
-//    var description: String {
-//        switch self {
-//        case .editProfile: return "Edit Profile"
-//        case .logout: return "Log Out"
-//        }
-//    }
-//}
-//
-//enum CommunicationOptions: Int, CaseIterable, SectionType {
-//    case notifications
-//    case email
-//    case reportCrashes
-//    
-//    var containsSwitch: Bool {
-//        switch self {
-//        case .notifications: return true
-//        case .email: return true
-//        case .reportCrashes: return true
-//        }
-//    }
-//    
-//    var description: String {
-//        switch self {
-//        case .notifications: return "Notifications"
-//        case .email: return "Email"
-//        case .reportCrashes: return "Report Crashes"
-//        }
-//    }
-//}
+enum Settings: Int, CaseIterable, SectionType {
+    case rename
+    case mute
+    
+    var containsSwitch: Bool {
+        return true
+    }
+    
+    var description: String {
+        switch self {
+        case .rename: return "Rename Device"
+        case .mute: return "Mute Device"
+    }
+    }
+}
+
+enum Devices: Int, CaseIterable, SectionType {
+    case addDevice
+    case removeDevice
+    
+    var containsSwitch: Bool {
+        return false
+    }
+    
+    var description: String {
+        switch self {
+        case .addDevice: return "Add Device"
+        case .removeDevice: return "Remove Device"
+    }
+    }
+}
+

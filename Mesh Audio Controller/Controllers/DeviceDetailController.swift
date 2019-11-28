@@ -33,18 +33,15 @@ class DeviceDetailController: UITableViewController {
     func configureUI(){
     self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(handleDone))
     self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Disconnect", style: .done, target: self, action: #selector(handleDisconnect))
-    view.backgroundColor = .white
     }
 
     func configureTable(){
         self.tableView.register(SettingsCell.self, forCellReuseIdentifier: reuseIdentifier)
         self.tableView.register(Header.self, forHeaderFooterViewReuseIdentifier: "sectionHeader")
-        let frame = CGRect(x: 0, y: 88, width: view.frame.width, height: 0)
-        let infoHeader = DeviceInfoHeader(frame: frame)
+        let infoHeader = DeviceInfoHeader()
         infoHeader.id = self.peripheral?.identifier.uuidString
         infoHeader.state = peripheralState[(self.peripheral?.state.rawValue)!]
         infoHeader.name = self.peripheral?.name
-        self.tableView.rowHeight = 60
         self.tableView.tableHeaderView = infoHeader
         tableView.tableFooterView = UIView()
     }
@@ -66,7 +63,7 @@ class DeviceDetailController: UITableViewController {
         guard let section = SettingsSection(rawValue: indexPath.section) else { return 50 }
         switch section {
             case .DeviceInfo:
-                return 80
+                return 60
             case .Settings:
                 return 50
             case .Devices:
@@ -75,22 +72,23 @@ class DeviceDetailController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! SettingsCell
-//        guard let section = SettingsSection(rawValue: indexPath.section) else { return UITableViewCell() }
-//
-////        switch section {
-////        case .DeviceInfo:
-////            let social = DeviceInfo(rawValue: indexPath.row)
-////            cell.sectionType = social
-////        case .Settings:
-////            let communications = CommunicationOptions(rawValue: indexPath.row)
-////            cell.sectionType = communications
-////        case .Devices
-////
-////        }
-//
-//        return cell
-        return UITableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! SettingsCell
+        guard let section = SettingsSection(rawValue: indexPath.section) else { return UITableViewCell() }
+
+        switch section {
+        case .DeviceInfo:
+            let deviceInfo = DeviceInfo(rawValue: indexPath.row)
+            cell.sectionType = deviceInfo
+        case .Settings:
+           let settings = Settings(rawValue: indexPath.row)
+            cell.sectionType = settings
+        case .Devices:
+            let devices = Devices(rawValue: indexPath.row)
+            cell.sectionType = devices
+        }
+
+        return cell
+//        return UITableViewCell()
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         return
@@ -101,139 +99,25 @@ class DeviceDetailController: UITableViewController {
 //        let title = UILabel()
         let view = tableView.dequeueReusableHeaderFooterView(withIdentifier:
                           "sectionHeader") as! Header
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = UIColor(red: 55/255, green: 120/255, blue: 250/255, alpha: 1)
+        view.backgroundView = backgroundView
         view.title.text = SettingsSection(rawValue: section)?.description
 
         return view
-//        title.font = UIFont.boldSystemFont(ofSize: 16)
-//        title.text = SettingsSection(rawValue: section)?.description
-//        view.addSubview(title)
-//        title.translatesAutoresizingMaskIntoConstraints = false
-//        title.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-////        title.topAnchor.constraint(equalTo: super.view.bottomAnchor).isActive = true
-//        title.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16).isActive = true
     }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
          guard let section = SettingsSection(rawValue: section) else { return 0 }
                 switch section {
-                case .DeviceInfo: return DeviceSettings.allCases.count
+                case .DeviceInfo:
+                    return DeviceInfo.allCases.count
                 case .Settings:
-                    return 4
+                    return Settings.allCases.count
                 case .Devices:
-                    return 4
+                    return Devices.allCases.count
         }
     }
     override func numberOfSections(in tableView: UITableView) -> Int {
         return SettingsSection.allCases.count
     }
 }
-
-//
-//class DeviceDetailController: UIViewController {
-//
-//    // MARK: - Properties
-//
-//    var tableView: UITableView!
-//    var deviceInfoHeader: DeviceInfoHeader!
-//
-//    // MARK: - Init
-//
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//        configureUI()
-//    }
-//
-//    // MARK: - Helper Functions
-//
-//    func configureTableView() {
-//        tableView = UITableView()
-//        tableView.delegate = self
-//        tableView.dataSource = self
-//        tableView.rowHeight = 60
-//
-//        tableView.register(SettingsCell.self, forCellReuseIdentifier: reuseIdentifier)
-//        view.addSubview(tableView)
-//        tableView.frame = view.frame
-//
-//        let frame = CGRect(x: 0, y: 88, width: view.frame.width, height: 100)
-//        deviceInfoHeader = DeviceInfoHeader(frame: frame)
-//        tableView.tableHeaderView = deviceInfoHeader
-//        tableView.tableFooterView = UIView()
-//    }
-//
-//    func configureUI() {
-//        configureTableView()
-//
-//        navigationController?.navigationBar.prefersLargeTitles = true
-//        navigationController?.navigationBar.isTranslucent = false
-//        navigationController?.navigationBar.barStyle = .black
-//        navigationController?.navigationBar.barTintColor = UIColor(red: 55/255, green: 120/255, blue: 250/255, alpha: 1)
-//        navigationItem.title = "Settings"
-//    }
-//
-//}
-//
-//extension ViewController: UITableViewDelegate, UITableViewDataSource {
-//
-//    func numberOfSections(in tableView: UITableView) -> Int {
-//        return SettingsSection.allCases.count
-//    }
-//
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//
-//        guard let section = SettingsSection(rawValue: section) else { return 0 }
-//
-//        switch section {
-//        case .Social: return SocialOptions.allCases.count
-//        case .Communications: return CommunicationOptions.allCases.count
-//        }
-//    }
-//
-//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        let view = UIView()
-//        view.backgroundColor = UIColor(red: 55/255, green: 120/255, blue: 250/255, alpha: 1)
-//
-//        print("Section is \(section)")
-//
-//        let title = UILabel()
-//        title.font = UIFont.boldSystemFont(ofSize: 16)
-//        title.textColor = .white
-//        title.text = SettingsSection(rawValue: section)?.description
-//        view.addSubview(title)
-//        title.translatesAutoresizingMaskIntoConstraints = false
-//        title.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-//        title.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16).isActive = true
-//
-//        return view
-//    }
-//
-//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//        return 40
-//    }
-//
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! SettingsCell
-//        guard let section = SettingsSection(rawValue: indexPath.section) else { return UITableViewCell() }
-//
-//        switch section {
-//        case .Social:
-//            let social = SocialOptions(rawValue: indexPath.row)
-//            cell.sectionType = social
-//        case .Communications:
-//            let communications = CommunicationOptions(rawValue: indexPath.row)
-//            cell.sectionType = communications
-//        }
-//
-//        return cell
-//    }
-//
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        guard let section = SettingsSection(rawValue: indexPath.section) else { return }
-//
-//        switch section {
-//        case .Social:
-//            print(SocialOptions(rawValue: indexPath.row)?.description)
-//        case .Communications:
-//            print(CommunicationOptions(rawValue: indexPath.row)?.description)
-//        }
-//    }
-//}
