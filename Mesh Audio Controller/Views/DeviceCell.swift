@@ -55,5 +55,5 @@ class DeviceCell: UITableViewCell {
         deviceNameLabel.adjustsFontForContentSizeCategory = true
         deviceNameLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         deviceNameLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 16).isActive = true
-     }
+    }
 }

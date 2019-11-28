@@ -11,7 +11,7 @@ import UIKit
 
 class Header: UITableViewHeaderFooterView {
     let title = UILabel()
-
+    
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         configureContents()
@@ -24,7 +24,7 @@ class Header: UITableViewHeaderFooterView {
     func configureContents() {
         title.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(title)
-
+        
         // Center the image vertically and place it near the leading
         // edge of the view. Constrain its width and height to 50 points.
         NSLayoutConstraint.activate([
@@ -32,9 +32,9 @@ class Header: UITableViewHeaderFooterView {
             // space in the header view.
             title.heightAnchor.constraint(equalToConstant: 30),
             title.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor,
-                   constant: 8),
+                                           constant: 8),
             title.trailingAnchor.constraint(equalTo:
-                   contentView.layoutMarginsGuide.trailingAnchor),
+                contentView.layoutMarginsGuide.trailingAnchor),
             title.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
     }

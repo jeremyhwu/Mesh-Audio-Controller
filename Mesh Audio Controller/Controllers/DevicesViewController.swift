@@ -59,7 +59,7 @@ class DevicesViewController: UIViewController {
     }
     
     func configureTableView() {
-         // Register the custom header view.
+        // Register the custom header view.
         tableView.register(Header.self, forHeaderFooterViewReuseIdentifier: "sectionHeader")
         navigationItem.title = "Devices"
         navigationController?.navigationBar.prefersLargeTitles = true
@@ -80,8 +80,8 @@ class DevicesViewController: UIViewController {
     func configureRefreshControl() {
         tableView.refreshControl = refreshControl
         tableView.refreshControl?.addTarget(self, action:
-        #selector(handleRefreshControl),
-        for: .valueChanged)
+            #selector(handleRefreshControl),
+                                            for: .valueChanged)
     }
     
     @objc func handleRefreshControl(){
@@ -140,9 +140,9 @@ extension DevicesViewController : DeviceDetailDelegate {
 
 extension DevicesViewController : UITableViewDelegate, UITableViewDataSource {
     
-     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = tableView.dequeueReusableHeaderFooterView(withIdentifier:
-                   "sectionHeader") as! Header
+            "sectionHeader") as! Header
         let backgroundView = UIView()
         backgroundView.backgroundColor = UIColor(red: 55/255, green: 120/255, blue: 250/255, alpha: 1)
         view.backgroundView = backgroundView
@@ -176,17 +176,17 @@ extension DevicesViewController : UITableViewDelegate, UITableViewDataSource {
         }
         else {
             let alert = UIAlertController(title: "Connect to \(cell.name)?", message: "Connect to device with id: \(cell.id)?", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "No", style: .default, handler: nil))
-                alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (UIAlertAction) in
-                    let peripheral = self.cells[indexPath.section][indexPath.row]
-                    if let index = self.cbPeripherals.firstIndex(
-                        where: {$0.name == peripheral.name && $0.identifier.uuidString == peripheral.id}) {
-                        self.cells[self.disconnected].remove(at: indexPath.row)
-                        self.cells[self.connected].append(peripheral)
-                        self.connectToDevice(peripheral: self.cbPeripherals[index])
-                    }
-                }))
-                self.present(alert, animated: true)
+            alert.addAction(UIAlertAction(title: "No", style: .default, handler: nil))
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (UIAlertAction) in
+                let peripheral = self.cells[indexPath.section][indexPath.row]
+                if let index = self.cbPeripherals.firstIndex(
+                    where: {$0.name == peripheral.name && $0.identifier.uuidString == peripheral.id}) {
+                    self.cells[self.disconnected].remove(at: indexPath.row)
+                    self.cells[self.connected].append(peripheral)
+                    self.connectToDevice(peripheral: self.cbPeripherals[index])
+                }
+            }))
+            self.present(alert, animated: true)
         }
     }
     
@@ -223,8 +223,8 @@ extension DevicesViewController : CBCentralManagerDelegate {
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         if !cbPeripherals.contains(where: {$0.identifier == peripheral.identifier}){
             if peripheral.name != nil {
-            peripheral.delegate = self
-            cbPeripherals.append(peripheral)
+                peripheral.delegate = self
+                cbPeripherals.append(peripheral)
             }
         }
     }
@@ -242,7 +242,7 @@ extension DevicesViewController : CBCentralManagerDelegate {
         }
         self.tableView.reloadData()
         let alert = UIAlertController(title: "Connected to \(peripheral.name ?? "Unkown")", message: "Connected to device with id: \(peripheral.identifier).", preferredStyle: .alert)
-               alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
         self.present(alert, animated: true)
     }
     

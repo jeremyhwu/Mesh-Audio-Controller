@@ -29,7 +29,7 @@ class DeviceInfoHeader: UIView {
         deviceStateLabel.translatesAutoresizingMaskIntoConstraints = false
         
         addSubview(deviceNameLabel)
-//        deviceNameLabel.topAnchor.constraint(equalTo: self.bottomAnchor, constant: 30).isActive = true
+        //        deviceNameLabel.topAnchor.constraint(equalTo: self.bottomAnchor, constant: 30).isActive = true
         deviceNameLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         deviceNameLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 16).isActive = true
         
