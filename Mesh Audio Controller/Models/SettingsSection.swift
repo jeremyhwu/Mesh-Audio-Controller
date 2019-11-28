@@ -24,26 +24,20 @@ enum SettingsSection: Int, CaseIterable, CustomStringConvertible {
     }
 }
 
-//enum DeviceInfo: Int, CaseIterable, SectionType {
-//    case name
-//    case id
-//    case state
-//    
-//    var containsSwitch: Bool {
-//        return false
-//    }
-//    
-//    var description: String {
-//        switch self {
-//        case .name: return "name"
-//        case .id:
-//            <#code#>
-//        case .state:
-//            <#code#>
-//        }
-//    }
-//    
-//}
+enum DeviceSettings: Int, CaseIterable, SectionType {
+    case rename
+    
+    var containsSwitch: Bool {
+        return false
+    }
+    
+    var description: String {
+        switch self {
+        case .rename: return "Rename Device"
+    }
+    }
+}
+
 //
 //enum SocialOptions: Int, CaseIterable, SectionType {
 //    case editProfile

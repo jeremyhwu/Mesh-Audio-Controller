@@ -24,14 +24,7 @@ class DeviceCell: UITableViewCell {
         self.id = ""
         self.peripheral = nil
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        let stackView = UIStackView()
-        let container = UIView()
-        container.addSubview(stackView)
-        addSubview(container)
-        stackView.addArrangedSubview(propertiesLabel)
-        stackView.addArrangedSubview(deviceNameLabel)
-        stackView.addArrangedSubview(deviceIDLabel)
-        stackView.addArrangedSubview(deviceStateLabel)
+        addSubview(deviceNameLabel)
         configureLabels()
     }
     required init?(coder: NSCoder) {
@@ -44,9 +37,6 @@ class DeviceCell: UITableViewCell {
         peripheral = device.peripheral
         deviceIDLabel.text = "ID: \(id)"
         deviceNameLabel.text = "\(name)"
-        propertiesLabel.text = """
-                                \(device.name)
-                                """
     }
     
     func configureLabels() {
@@ -63,39 +53,7 @@ class DeviceCell: UITableViewCell {
         deviceNameLabel.translatesAutoresizingMaskIntoConstraints = false
         deviceNameLabel.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: palatino)
         deviceNameLabel.adjustsFontForContentSizeCategory = true
-        
-        deviceIDLabel.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor).isActive = true
-        deviceIDLabel.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor).isActive = true
-        deviceNameLabel.leadingAnchor.constraint(equalTo: deviceIDLabel.leadingAnchor).isActive = true
-        deviceNameLabel.trailingAnchor.constraint(equalTo: deviceIDLabel.trailingAnchor).isActive = true
-        
-        deviceIDLabel.firstBaselineAnchor.constraint(equalToSystemSpacingBelow: contentView.layoutMarginsGuide.topAnchor, multiplier: 1).isActive = true
-
-        self.contentView.bottomAnchor.constraint(equalToSystemSpacingBelow: deviceNameLabel.lastBaselineAnchor, multiplier: 1).isActive = true
-
-        deviceNameLabel.firstBaselineAnchor.constraint(equalToSystemSpacingBelow: deviceIDLabel.lastBaselineAnchor, multiplier: 1).isActive = true
-
-        
-        
-        
-//        guard let palatino = UIFont(name: "Palatino", size: 18) else {
-//                  fatalError("""
-//                      Failed to load the "Palatino" font.
-//                      Since this font is included with all versions of iOS that support Dynamic Type, verify that the spelling and casing is correct.
-//                      """
-//                  )
-//              }
-//        propertiesLabel.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: palatino)
-//        propertiesLabel.adjustsFontForContentSizeCategory = true
-//
-//        propertiesLabel.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor).isActive = true
-//        propertiesLabel.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor).isActive = true
-//
-//        propertiesLabel.firstBaselineAnchor.constraint(equalToSystemSpacingBelow: contentView.layoutMarginsGuide.topAnchor, multiplier: 1).isActive = true
-//        propertiesLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-//        propertiesLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-//        propertiesLabel.numberOfLines = 3
-//        propertiesLabel.adjustsFontSizeToFitWidth = true
-//        propertiesLabel.preferredMaxLayoutWidth = self.frame.size.width
+        deviceNameLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        deviceNameLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 16).isActive = true
      }
 }

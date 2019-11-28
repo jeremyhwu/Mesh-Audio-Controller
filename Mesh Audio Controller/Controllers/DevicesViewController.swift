@@ -23,6 +23,7 @@ class DevicesViewController: UIViewController {
     var RSSIs = [NSNumber]()
     var characteristicValue = [CBUUID: NSData]()
     var characteristics = [String : CBCharacteristic]()
+    var services : [CBUUID]?
     var dataSource : UITableViewDataSource?
     var timer = Timer()
     var cells = [[Device]]()
@@ -194,6 +195,7 @@ extension DevicesViewController : UITableViewDelegate, UITableViewDataSource {
     
     func disconnectFromDevice(peripheral : CBPeripheral){
         cbManager?.cancelPeripheralConnection(peripheral)
+        //remove from cbperipherals and scan again. Apparently not supposed to use same peripheral twice
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -220,6 +222,7 @@ extension DevicesViewController : CBCentralManagerDelegate {
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         if !cbPeripherals.contains(where: {$0.identifier == peripheral.identifier}){
             if peripheral.name != nil {
+            peripheral.delegate = self
             cbPeripherals.append(peripheral)
             }
         }
@@ -229,6 +232,9 @@ extension DevicesViewController : CBCentralManagerDelegate {
         print("connected to peripheral")
         
         // Move from disconnected to connected
+        peripheral.discoverServices(nil)
+        print(peripheral.services as Any)
+        print(peripheral.state)
         if let index = cells[disconnected].firstIndex(where: {$0.name == peripheral.name && $0.id == peripheral.identifier.uuidString}) {
             cells[connected].append(cells[disconnected][index])
             cells[disconnected].remove(at: index)
@@ -256,6 +262,18 @@ extension DevicesViewController : CBCentralManagerDelegate {
         alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
         self.present(alert, animated: true)
         print("disconnected from peripheral")
+    }
+}
+
+extension DevicesViewController : CBPeripheralDelegate {
+    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
+        return
+    }
+    func peripheralManagerDidStartAdvertising(_ peripheral: CBPeripheralManager, error: Error?) {
+        return
+    }
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
+        return
     }
 }
 

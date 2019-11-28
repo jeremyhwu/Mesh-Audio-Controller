@@ -10,6 +10,12 @@ import UIKit
 import CoreBluetooth
 
 private let reuseIdentifier = "SettingsCell"
+private let peripheralState = [
+    "disconnected",
+    "connecting",
+    "connected",
+    "disconnecting"
+]
 
 class DeviceDetailController: UITableViewController {
     var delegate : DeviceDetailDelegate?
@@ -31,7 +37,13 @@ class DeviceDetailController: UITableViewController {
     }
 
     func configureTable(){
-        self.tableView.tableHeaderView = DeviceInfoHeader(frame: self.tableView.frame)
+        let infoHeader = DeviceInfoHeader(frame: CGRect(x: 0, y: 0, width: self.tableView.frame.width, height: 5))
+        infoHeader.id = self.peripheral?.identifier.uuidString
+        infoHeader.state = peripheralState[(self.peripheral?.state.rawValue)!]
+        infoHeader.name = self.peripheral?.name
+        self.tableView.rowHeight = 50
+        self.tableView.tableHeaderView = infoHeader
+        tableView.tableFooterView = UIView()
     }
 
     @objc func handleDone() {
@@ -46,6 +58,10 @@ class DeviceDetailController: UITableViewController {
         }))
         self.present(alert, animated: true)
     }
+//
+//    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//            return 40
+//        }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 //        let cell = tableView.dequeueReusableCell(withIdentifier: "TableCell")
@@ -69,8 +85,14 @@ class DeviceDetailController: UITableViewController {
         return view
     }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return tableData[section].count
-        return 1
+         guard let section = SettingsSection(rawValue: section) else { return 0 }
+                switch section {
+                case .DeviceInfo: return DeviceSettings.allCases.count
+                case .Settings:
+                    return 0
+                case .Devices:
+                    return 0
+        }
     }
     override func numberOfSections(in tableView: UITableView) -> Int {
         return SettingsSection.allCases.count
