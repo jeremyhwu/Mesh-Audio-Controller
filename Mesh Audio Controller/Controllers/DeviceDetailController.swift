@@ -10,6 +10,8 @@ import UIKit
 import CoreBluetooth
 
 class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
+    let nc = NotificationCenter.default
+    private let bluetoothManager = BluetoothManager.sharedManager
     private let reuseIdentifier = "SettingsCell"
     private let peripheralState = [
         "disconnected",
@@ -73,24 +75,24 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
         guard let services = peripheral?.services else { return }
         for service in services {
             print(service.uuid)
-//            if self.serviceTable.contains(service.uuid){
-                peripheral?.discoverCharacteristics(nil, for: service)
-                guard let characteristics = service.characteristics else { return }
-                for characterstic in characteristics {
-                    print("here")
-                    peripheral?.setNotifyValue(true, for: characterstic)
-                    peripheral?.discoverDescriptors(for: characterstic)
-                    peripheral?.readValue(for: characterstic)
-                    print(characterstic.value)
-                    print(characterstic.descriptors)
-                }
-//            }
+            //            if self.serviceTable.contains(service.uuid){
+            peripheral?.discoverCharacteristics(nil, for: service)
+            guard let characteristics = service.characteristics else { return }
+            for characterstic in characteristics {
+                print("here")
+                peripheral?.setNotifyValue(true, for: characterstic)
+                peripheral?.discoverDescriptors(for: characterstic)
+                peripheral?.readValue(for: characterstic)
+                print(characterstic.value)
+                print(characterstic.descriptors)
+            }
+            //            }
         }
     }
     func sendData(data: NSData){
         //        peripheral?.writeValue(data: data, for: CBDescriptor())
     }
-        
+    
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         print(characteristic.value as Any)
         switch characteristic.uuid {
@@ -120,7 +122,7 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
     }
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
-          print("characteristic discovered")
+        print("characteristic discovered")
     }
     
     

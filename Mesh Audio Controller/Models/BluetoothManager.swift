@@ -24,14 +24,17 @@ class BluetoothManager : NSObject {
     static let scanStarted = NSNotification.Name("SCAN_STARTED")
     static let scanEnded = NSNotification.Name("SCAN_STOPPED")
     static let deviceConnected = NSNotification.Name("CONNECTED_NOTIFICATION")
+    static let deviceDisconnected = NSNotification.Name("DISCONNECTED_NOTIFICATION")
+    static let btDisabled = NSNotification.Name("BT_DISABLED")
     
     //Peripherals/characteristic storage
-    fileprivate var cbCentralManager: CBCentralManager!
-    fileprivate var connectedPeripherals = Set<CBPeripheral>()
-    fileprivate var disconnectedPeripherals = Set<CBPeripheral>()
-    fileprivate var characteristics = [CBPeripheral:Set<CBCharacteristic>]()
+    var cbCentralManager: CBCentralManager!
+    var connectedPeripherals = Set<CBPeripheral>()
+    var disconnectedPeripherals = Set<CBPeripheral>()
+    var characteristics = [CBPeripheral:Set<CBCharacteristic>]()
     
     private let queue = DispatchQueue(label: "BTQueue")
+    private let nc = NotificationCenter.default
     var timer = Timer()
     
     private override init() {
@@ -39,67 +42,70 @@ class BluetoothManager : NSObject {
         cbCentralManager = CBCentralManager(delegate: self, queue: queue, options: [CBCentralManagerOptionRestoreIdentifierKey: "SharedManager"])
     }
     
-    func scan(){
+    func connect(peripheral: CBPeripheral) {
+        self.cbCentralManager.connect(peripheral, options: nil)
+    }
+    
+    func scan() {
         print("Scanning for devices")
         cbCentralManager.scanForPeripherals(withServices: nil, options: nil)
+        self.sendScanStartedNotification()
         self.timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { (timer) in
             self.stopscan()
         }
     }
     
-    func stopscan(){
+    func stopscan() {
+        self.sendScanEndedNotification()
         self.timer.invalidate()
         cbCentralManager.stopScan()
     }
     
+    func refresh() {
+        for peripheral in disconnectedPeripherals {
+            characteristics.removeValue(forKey: peripheral)
+        }
+        disconnectedPeripherals = Set<CBPeripheral>()
+        self.scan()
+    }
+    
     func sendCompleteNotification(peripheral: CBPeripheral) {
-        let nc = NotificationCenter.default
         nc.post(name: BluetoothManager.deviceConnected, object: self, userInfo: ["NAME":peripheral.name ?? "Unknown","ID":peripheral.identifier.uuidString])
     }
     
-    func sendScanStartedNotification(peripheral: CBPeripheral) {
-        let nc = NotificationCenter.default
+    func sendScanStartedNotification() {
         nc.post(name: BluetoothManager.scanStarted, object: nil)
     }
     
-    func sendScanEndedNotification(peripheral: CBPeripheral) {
-        let nc = NotificationCenter.default
+    func sendScanEndedNotification() {
         nc.post(name: BluetoothManager.scanEnded, object: nil)
     }
     
     func sendConnectedNotification(peripheral: CBPeripheral) {
-        let nc = NotificationCenter.default
-        nc.post(name: BluetoothManager.scanEnded, object: peripheral)
+        nc.post(name: BluetoothManager.deviceConnected, object: self, userInfo: ["peripheral":peripheral])
     }
 }
 
 extension BluetoothManager : CBCentralManagerDelegate {
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         switch central.state {
-        case .unknown:
-            break
-        case .resetting:
-            break
-        case .unsupported:
-            break
-        case .unauthorized:
-            break
-        case .poweredOff:
-            break
         case .poweredOn:
-            self.scan()
-        @unknown default:
             break
+        default:
+            let nc = NotificationCenter.default
+            nc.post(name: BluetoothManager.btDisabled, object: nil)
         }
     }
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        self.disconnectedPeripherals.insert(peripheral)
+        if peripheral.name != nil {
+             self.disconnectedPeripherals.insert(peripheral)
+        }
     }
     
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
-        print("Connected to \(peripheral)")
+        print("Connected to \(peripheral.name!)")
         self.connectedPeripherals.insert(peripheral)
         peripheral.delegate = self
         peripheral.discoverServices(nil)
@@ -108,7 +114,9 @@ extension BluetoothManager : CBCentralManagerDelegate {
     }
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
+        print("disconnected from \(peripheral.name!)")
         self.connectedPeripherals.remove(peripheral)
+        nc.post(name: BluetoothManager.deviceDisconnected, object: self, userInfo: ["peripheral":peripheral])
         
         if let error = error {
             print("Disconnected from \(peripheral) with error: \(error)")
@@ -133,6 +141,7 @@ extension BluetoothManager : CBCentralManagerDelegate {
     }
     
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
+        print("failed to connect")
         //
         //        if let error = error {
         //            log?.error("Failed to connect with error:\(error)")
@@ -178,7 +187,7 @@ extension BluetoothManager : CBPeripheralDelegate {
     }
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
-        print("updated characterstic \(characteristic). New value: \(characteristic.value)")
+        print("updated characteristic. New value: \(characteristic.value)")
         //        if let data = characteristic.value {
         //            var values = [UInt8](repeating:0, count:data.count)
         //            data.copyBytes(to: &values, count: data.count)
