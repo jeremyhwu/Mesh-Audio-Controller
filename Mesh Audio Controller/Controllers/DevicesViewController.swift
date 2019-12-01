@@ -43,6 +43,8 @@ class DevicesViewController: UIViewController {
         "disconnecting"
     ]
     
+    let nc = NotificationCenter.default
+    
     enum TableSection : Int {
         case action = 0, Disconnected
     }

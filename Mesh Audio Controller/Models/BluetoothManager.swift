@@ -20,11 +20,19 @@ class BluetoothManager : NSObject {
     let hello = CBUUID(string: "9FEE1609-4B66-4DCC-87B0-E0DD2415E892")
     let world = CBUUID(string: "4B9A381D-90E4-41DD-AA10-83746A4B5F1F")
     
+    //Notifications
+    static let scanStarted = NSNotification.Name("SCAN_STARTED")
+    static let scanEnded = NSNotification.Name("SCAN_STOPPED")
+    static let deviceConnected = NSNotification.Name("CONNECTED_NOTIFICATION")
+    
+    //Peripherals/characteristic storage
     fileprivate var cbCentralManager: CBCentralManager!
     fileprivate var connectedPeripherals = Set<CBPeripheral>()
     fileprivate var disconnectedPeripherals = Set<CBPeripheral>()
     fileprivate var characteristics = [CBPeripheral:Set<CBCharacteristic>]()
+    
     private let queue = DispatchQueue(label: "BTQueue")
+    var timer = Timer()
     
     private override init() {
         super.init()
@@ -33,38 +41,56 @@ class BluetoothManager : NSObject {
     
     func scan(){
         print("Scanning for devices")
-        //        cbManager.scanForPeripherals(withServices: [BTConstants.ServiceUUID], options: nil)
-        
-        //        let alert = UIAlertController(title: "Scanning", message: "Scanning for nearby bluetooth devices.", preferredStyle: .alert)
-        //        self.present(alert, animated: true)
-        //        timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { (timer) in
-        //            self.stopscan()
-        //        }
+        cbCentralManager.scanForPeripherals(withServices: nil, options: nil)
+        self.timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { (timer) in
+            self.stopscan()
+        }
     }
     
+    func stopscan(){
+        self.timer.invalidate()
+        cbCentralManager.stopScan()
+    }
+    
+    func sendCompleteNotification(peripheral: CBPeripheral) {
+        let nc = NotificationCenter.default
+        nc.post(name: BluetoothManager.deviceConnected, object: self, userInfo: ["NAME":peripheral.name ?? "Unknown","ID":peripheral.identifier.uuidString])
+    }
+    
+    func sendScanStartedNotification(peripheral: CBPeripheral) {
+        let nc = NotificationCenter.default
+        nc.post(name: BluetoothManager.scanStarted, object: nil)
+    }
+    
+    func sendScanEndedNotification(peripheral: CBPeripheral) {
+        let nc = NotificationCenter.default
+        nc.post(name: BluetoothManager.scanEnded, object: nil)
+    }
+    
+    func sendConnectedNotification(peripheral: CBPeripheral) {
+        let nc = NotificationCenter.default
+        nc.post(name: BluetoothManager.scanEnded, object: peripheral)
+    }
 }
 
 extension BluetoothManager : CBCentralManagerDelegate {
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
-        //        switch central.state {
-        //        case .poweredOff: break
-        //
-        //        case .poweredOn:
-        //            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        //            DispatchQueue.main.async {
-        //                appDelegate.sendLocalNotification(title: "Scanning", body: "Starting Bluetooth Scan", color: .green)
-        //            }
-        //            self.startScan()
-        //
-        //        case .unsupported: break
-        //
-        //        case .unknown: break
-        //
-        //        case .unauthorized: break
-        //
-        //        case .resetting: break
-        //
-        //        }
+        switch central.state {
+        case .unknown:
+            break
+        case .resetting:
+            break
+        case .unsupported:
+            break
+        case .unauthorized:
+            break
+        case .poweredOff:
+            break
+        case .poweredOn:
+            self.scan()
+        @unknown default:
+            break
+        }
     }
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
@@ -73,26 +99,23 @@ extension BluetoothManager : CBCentralManagerDelegate {
     
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
-        //
-        //        log?.info("Connected to \(peripheral)")
-        //        self.connectedPeripherals.insert(peripheral)
-        //        peripheral.delegate = self
-        //        peripheral.discoverServices([])
-        //        self.sendConnectionNotification()
+        print("Connected to \(peripheral)")
         self.connectedPeripherals.insert(peripheral)
         peripheral.delegate = self
         peripheral.discoverServices(nil)
         self.disconnectedPeripherals.remove(peripheral)
+        self.sendConnectedNotification(peripheral: peripheral)
     }
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-        //
-        //        if let error = error {
-        //            log?.error("Disconnected from \(peripheral) with error: \(error)")
-        //
-        //        } else {
-        //            log?.warning("Disconnected from \(peripheral)")
-        //        }
+        self.connectedPeripherals.remove(peripheral)
+        
+        if let error = error {
+            print("Disconnected from \(peripheral) with error: \(error)")
+            
+        } else {
+            print("Disconnected from \(peripheral)")
+        }
         //
         //        self.connectedPeripherals.remove(peripheral)
         //        self.characteristics[peripheral] = nil
