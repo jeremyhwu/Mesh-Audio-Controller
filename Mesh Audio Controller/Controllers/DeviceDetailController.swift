@@ -30,12 +30,21 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
     var delegate : DeviceDetailDelegate?
     var cell : DeviceCell?
     var peripheral : CBPeripheral?
-    var characteristics : [CBCharacteristic]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureNotifications()
         configureUI()
         configureTable()
+    }
+    
+    func configureNotifications() {
+        nc.addObserver(forName: BluetoothManager.characteristicUpdated, object: nil, queue: OperationQueue.main) { (notification) in
+            let characteristic = notification.userInfo!["characteristic"] as! CBCharacteristic
+            let peripheral = notification.userInfo!["peripheral"] as! CBPeripheral
+            print(characteristic.descriptors, characteristic.value)
+        }
+        
     }
     
     func configureUI(){
@@ -48,7 +57,7 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
         self.characteristicTable = [hello, world, testCharacteristic]
         self.tableView.register(SettingsCell.self, forCellReuseIdentifier: reuseIdentifier)
         self.tableView.register(Header.self, forHeaderFooterViewReuseIdentifier: "sectionHeader")
-        let infoHeader = DeviceInfoHeader()
+        let infoHeader = DeviceInfoHeader(name: peripheral?.name, id: peripheral?.identifier.uuidString, state: peripheralState[(peripheral?.state.rawValue)!])
         infoHeader.id = self.peripheral?.identifier.uuidString
         infoHeader.state = peripheralState[(self.peripheral?.state.rawValue)!]
         infoHeader.name = self.peripheral?.name
@@ -71,20 +80,12 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
     
     //GATT Services
     func getData() {
-        peripheral?.discoverServices(nil)
-        guard let services = peripheral?.services else { return }
+        guard let services = self.peripheral?.services else { return }
         for service in services {
-            print(service.uuid)
-            //            if self.serviceTable.contains(service.uuid){
-            peripheral?.discoverCharacteristics(nil, for: service)
             guard let characteristics = service.characteristics else { return }
-            for characterstic in characteristics {
-                print("here")
-                peripheral?.setNotifyValue(true, for: characterstic)
-                peripheral?.discoverDescriptors(for: characterstic)
-                peripheral?.readValue(for: characterstic)
-                print(characterstic.value)
-                print(characterstic.descriptors)
+            for characteristic in characteristics {
+                print(characteristic.value?.description)
+                print(characteristic.descriptors?.description)
             }
             //            }
         }
@@ -145,6 +146,7 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
         switch section {
         case .DeviceInfo:
             let deviceInfo = DeviceInfo(rawValue: indexPath.row)
+            cell.sectionType = deviceInfo
             if deviceInfo!.containsSwitch {
                 cell.selectionStyle = .none
             }

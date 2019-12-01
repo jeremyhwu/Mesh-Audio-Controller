@@ -67,11 +67,11 @@ class DevicesViewController: UIViewController {
                 let peripheral = notification.userInfo!["peripheral"] as! CBPeripheral
                 if let index = self.cells[self.connected].firstIndex(where: {$0.name == peripheral.name && $0.id == peripheral.identifier.uuidString}) {
                     self.cells[self.connected].remove(at: index)
-                    self.cells[self.disconnected] = [Device]()
-                    self.tableView.reloadData()
                 }
                 let alert = UIAlertController(title: "Disconnected from \(peripheral.name ?? "Unknown")", message: "Disconnected from device with id: \(peripheral.identifier).", preferredStyle: .alert)
                 let action = UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: { (action: UIAlertAction) -> Void in
+                    self.cells[self.disconnected] = [Device]()
+                    self.tableView.reloadData()
                     self.bluetoothManager.refresh()
                 })
                 alert.addAction(action)
@@ -179,31 +179,6 @@ class DevicesViewController: UIViewController {
         }))
         self.present(alert, animated: true)
     }
-    
-    
-    //    func scan(){
-    //        //        cbManager.scanForPeripherals(withServices: [BTConstants.ServiceUUID], options: nil)
-    //        cbManager.scanForPeripherals(withServices: nil, options: nil)
-    //        let alert = UIAlertController(title: "Scanning", message: "Scanning for nearby bluetooth devices.", preferredStyle: .alert)
-    //        self.present(alert, animated: true)
-    //        timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { (timer) in
-    //            self.stopscan()
-    //        }
-    //    }
-    //    func stopscan(){
-    //        self.dismiss(animated: true, completion: nil)
-    //        timer.invalidate()
-    //        cbManager.stopScan()
-    //        DispatchQueue.main.async {
-    //            self.tableView.refreshControl?.endRefreshing()
-    //        }
-    //        for (peripheral) in cbPeripherals{
-    //            if !cells[connected].contains(where: {$0.id == peripheral.identifier.uuidString}) {
-    //                cells[disconnected].append(Device(name: peripheral.name ?? "Unknown", id: peripheral.identifier.uuidString, state: peripheralState[peripheral.state.rawValue], peripheral: peripheral))
-    //            }
-    //        }
-    //        self.tableView.reloadData()
-    //    }
 }
 
 extension DevicesViewController : DeviceDetailDelegate {
@@ -213,7 +188,7 @@ extension DevicesViewController : DeviceDetailDelegate {
     
     func disconnect(peripheral: CBPeripheral, controller: DeviceDetailController) {
         controller.dismiss(animated: true, completion: nil)
-        self.disconnectFromDevice(peripheral: peripheral)
+        self.bluetoothManager.disconnect(peripheral: peripheral)
     }
 }
 

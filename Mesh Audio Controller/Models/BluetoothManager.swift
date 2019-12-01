@@ -26,6 +26,7 @@ class BluetoothManager : NSObject {
     static let deviceConnected = NSNotification.Name("CONNECTED_NOTIFICATION")
     static let deviceDisconnected = NSNotification.Name("DISCONNECTED_NOTIFICATION")
     static let btDisabled = NSNotification.Name("BT_DISABLED")
+    static let characteristicUpdated = NSNotification.Name("CHARACTERISTIC_UPDATED")
     
     //Peripherals/characteristic storage
     var cbCentralManager: CBCentralManager!
@@ -40,10 +41,15 @@ class BluetoothManager : NSObject {
     private override init() {
         super.init()
         cbCentralManager = CBCentralManager(delegate: self, queue: queue, options: [CBCentralManagerOptionRestoreIdentifierKey: "SharedManager"])
+        
     }
     
     func connect(peripheral: CBPeripheral) {
         self.cbCentralManager.connect(peripheral, options: nil)
+    }
+    
+    func disconnect(peripheral: CBPeripheral) {
+        self.cbCentralManager.cancelPeripheralConnection(peripheral)
     }
     
     func scan() {
@@ -99,10 +105,9 @@ extension BluetoothManager : CBCentralManagerDelegate {
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         if peripheral.name != nil {
-             self.disconnectedPeripherals.insert(peripheral)
+            self.disconnectedPeripherals.insert(peripheral)
         }
     }
-    
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         print("Connected to \(peripheral.name!)")
@@ -117,27 +122,6 @@ extension BluetoothManager : CBCentralManagerDelegate {
         print("disconnected from \(peripheral.name!)")
         self.connectedPeripherals.remove(peripheral)
         nc.post(name: BluetoothManager.deviceDisconnected, object: self, userInfo: ["peripheral":peripheral])
-        
-        if let error = error {
-            print("Disconnected from \(peripheral) with error: \(error)")
-            
-        } else {
-            print("Disconnected from \(peripheral)")
-        }
-        //
-        //        self.connectedPeripherals.remove(peripheral)
-        //        self.characteristics[peripheral] = nil
-        //
-        //        if  self.targetPeripherals.contains(peripheral) && reconnectMode {
-        //
-        //            log?.info("Initiating reconnection to \(peripheral)")
-        //            central.connect(peripheral, options: nil)
-        //        } else if !reconnectMode {
-        //            self.stopScan()
-        //            self.startScan()
-        //        }
-        //
-        //        self.sendDisconnectionNotification()
     }
     
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
@@ -174,6 +158,7 @@ extension BluetoothManager : CBPeripheralDelegate {
         guard let services = peripheral.services else { return }
         for service in services {
             peripheral.discoverCharacteristics(nil, for: service) //discover all characteristics for now
+            print(service)
         }
     }
     
@@ -187,12 +172,13 @@ extension BluetoothManager : CBPeripheralDelegate {
     }
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
-        print("updated characteristic. New value: \(characteristic.value)")
-        //        if let data = characteristic.value {
-        //            var values = [UInt8](repeating:0, count:data.count)
-        //            data.copyBytes(to: &values, count: data.count)
-        //            print("\(values[0])")
-        //        }
+        if let data = characteristic.value {
+            var values = [UInt8](repeating:0, count:data.count)
+            data.copyBytes(to: &values, count: data.count)
+            print("Updated Characteristic \(characteristic). Value: \(values[0])")
+        }
+        nc.post(name: BluetoothManager.characteristicUpdated, object: self, userInfo: ["peripheral":peripheral, "characteristic":characteristic])
+        
     }
     
 }
