@@ -223,7 +223,9 @@ extension DevicesViewController : UITableViewDelegate, UITableViewDataSource {
             let vc = DeviceDetailController()
             vc.delegate = self
             vc.cell = cell
-            vc.peripheral = cell.peripheral
+            let peripheral = bluetoothManager.connectedPeripherals.first(where: {$0.identifier == cell.peripheral?.identifier }) //grab updated peripheral
+            cell.peripheral = peripheral
+            vc.peripheral = peripheral
             let deviceDetailController = UINavigationController(rootViewController: vc)
             self.present(deviceDetailController, animated: true, completion: nil)
         }

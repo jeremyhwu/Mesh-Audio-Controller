@@ -21,12 +21,14 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
     ]
     private var serviceTable : [CBUUID] = []
     private var characteristicTable : [CBUUID] = []
-    let service1 = CBUUID(string: "C3093770-1A43-4F1C-ABCC-24A448FC6218")
-    let service2 = CBUUID(string: "CEEF1D13-633C-4AC4-8B16-BC4D392551AD")
-    let testService = CBUUID(string: "3f403394-0000-1000-8000-00805f9b34fb")
-    let testCharacteristic = CBUUID(string: "3f40350c-0000-1000-8000-00805f9b34fb")
-    let hello = CBUUID(string: "9FEE1609-4B66-4DCC-87B0-E0DD2415E892")
-    let world = CBUUID(string: "4B9A381D-90E4-41DD-AA10-83746A4B5F1F")
+    let service = CBUUID(string: "00000ace-0000-1000-8000-00805f9b34fb")
+    let one = CBUUID(string: "0000ace0-0000-1000-8000-00805f9b34fb")
+    let two = CBUUID(string: "0000ace1-0000-1000-8000-00805f9b34fb")
+    let three = CBUUID(string: "0000ace2-0000-1000-8000-00805f9b34fb")
+    let deviceList = CBUUID(string: "0000ace2-0000-1000-8000-00805f9b34fb")
+//    let descriptor = "0x2901"
+    let descriptor = CBUUID(string: "0x2901")
+    
     var delegate : DeviceDetailDelegate?
     var cell : DeviceCell?
     var peripheral : CBPeripheral?
@@ -53,15 +55,10 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
     }
     
     func configureTable(){
-        self.serviceTable = [service1, service2, testService]
-        self.characteristicTable = [hello, world, testCharacteristic]
+        self.serviceTable = [service]
+        self.characteristicTable = [one, two, three]
         self.tableView.register(SettingsCell.self, forCellReuseIdentifier: reuseIdentifier)
         self.tableView.register(Header.self, forHeaderFooterViewReuseIdentifier: "sectionHeader")
-        let infoHeader = DeviceInfoHeader(name: peripheral?.name, id: peripheral?.identifier.uuidString, state: peripheralState[(peripheral?.state.rawValue)!])
-        infoHeader.id = self.peripheral?.identifier.uuidString
-        infoHeader.state = peripheralState[(self.peripheral?.state.rawValue)!]
-        infoHeader.name = self.peripheral?.name
-        self.tableView.tableHeaderView = infoHeader
         tableView.tableFooterView = UIView()
     }
     
@@ -80,52 +77,33 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
     
     //GATT Services
     func getData() {
-        guard let services = self.peripheral?.services else { return }
-        for service in services {
-            guard let characteristics = service.characteristics else { return }
-            for characteristic in characteristics {
-                print(characteristic.value?.description)
-                print(characteristic.descriptors?.description)
+        let services = self.peripheral?.services
+        if services != nil {
+            for service in services!{
+                print(service)
+                for characteristic in service.characteristics! {
+                    let value = characteristic.value ?? nil
+                    if value != nil {
+                        let data = [UInt8](value!)
+                        print(data)
+                    }
+                    var num = NSInteger(1)
+                    let data = NSData(bytes: &num, length: 1)
+                    peripheral?.writeValue(data as Data, for: characteristic, type: .withResponse)
+                }
             }
-            //            }
         }
     }
-    func sendData(data: NSData){
+    
+    func sendData(data: NSData, characteristic: CBCharacteristic){
         //        peripheral?.writeValue(data: data, for: CBDescriptor())
     }
     
-    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
-        print(characteristic.value as Any)
-        switch characteristic.uuid {
-        case hello:
-            print("hello: uuid: \(characteristic.uuid)")
-        case world:
-            print("world: uuid: \(characteristic.uuid)")
-        default:
-            break
-        }
+    func refreshChildDevices(){
+        var num = NSInteger(1)
+        let data = NSData(bytes: &num, length: 1)
+//        peripheral?.writeValue(data as Data, for: , type: .withResponse)
     }
-    
-    func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor characteristic: CBCharacteristic, error: Error?) {
-        // Notification has started
-        print("didUpdateNotificationStateFor")
-        if (characteristic.isNotifying) {
-            print("Notification began on \(characteristic)");
-        }
-    }
-    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor descriptor: CBDescriptor, error: Error?) {
-        print("didUpdateValueFor")
-        print(descriptor)
-    }
-    func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
-        print("didWriteValueFor")
-        print(characteristic)
-    }
-    
-    func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
-        print("characteristic discovered")
-    }
-    
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         guard let section = SettingsSection(rawValue: indexPath.section) else { return 50 }
@@ -204,10 +182,12 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
                     let textField = alert.textFields![0]
                     let text = textField.text?.data(using: .utf8)
                     if text != nil {
-                        self.sendData(data: NSData(data: text!))
+//                        self.sendData(data: NSData(data: text!))
                     }
                 }))
                 self.present(alert, animated: true)
+            case .refreshDeviceList:
+                break
             }
         case .Devices:
             let devices = Devices(rawValue: indexPath.row)

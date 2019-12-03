@@ -158,7 +158,6 @@ extension BluetoothManager : CBPeripheralDelegate {
         guard let services = peripheral.services else { return }
         for service in services {
             peripheral.discoverCharacteristics(nil, for: service) //discover all characteristics for now
-            print(service)
         }
     }
     
@@ -167,18 +166,15 @@ extension BluetoothManager : CBPeripheralDelegate {
         guard let characteristics = service.characteristics else { return }
         for characteristic in characteristics {
             self.characteristics[peripheral]?.insert(characteristic) //keep track of all characteristics in set
+            peripheral.readValue(for: characteristic)
+//            print("CHARACTERISTIC: \(characteristic). Value: \(characteristic.value)")
             peripheral.setNotifyValue(true, for: characteristic)
         }
     }
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
-        if let data = characteristic.value {
-            var values = [UInt8](repeating:0, count:data.count)
-            data.copyBytes(to: &values, count: data.count)
-            print("Updated Characteristic \(characteristic). Value: \(values[0])")
-        }
+        let value = characteristic.value ?? nil
         nc.post(name: BluetoothManager.characteristicUpdated, object: self, userInfo: ["peripheral":peripheral, "characteristic":characteristic])
-        
     }
     
 }

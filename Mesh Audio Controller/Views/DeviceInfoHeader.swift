@@ -13,14 +13,8 @@ class DeviceInfoHeader: UIView {
     var id : String?
     var state : String?
     
-    required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented"); }
+  required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented"); }
     
-    init(name: String?, id: String?, state: String?) {
-        self.name = name
-        self.id = id
-        self.state = state
-        super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
-    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
