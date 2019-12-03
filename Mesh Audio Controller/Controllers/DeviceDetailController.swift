@@ -26,18 +26,20 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
     let two = CBUUID(string: "0000ace1-0000-1000-8000-00805f9b34fb")
     let three = CBUUID(string: "0000ace2-0000-1000-8000-00805f9b34fb")
     let deviceList = CBUUID(string: "0000ace2-0000-1000-8000-00805f9b34fb")
-//    let descriptor = "0x2901"
-    let descriptor = CBUUID(string: "0x2901")
-    
+
     var delegate : DeviceDetailDelegate?
     var cell : DeviceCell?
     var peripheral : CBPeripheral?
+    var characteristics : [CBCharacteristic] = []
+    var services : [CBService] = []
+    var childDevices : [String] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureNotifications()
         configureUI()
         configureTable()
+        updateServicesAndCharacteristics()
     }
     
     func configureNotifications() {
@@ -45,6 +47,12 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
             let characteristic = notification.userInfo!["characteristic"] as! CBCharacteristic
             let peripheral = notification.userInfo!["peripheral"] as! CBPeripheral
             print(characteristic.descriptors, characteristic.value)
+            switch characteristic.uuid {
+            case self.deviceList:
+                return
+            default:
+                return
+            }
         }
         
     }
@@ -60,6 +68,19 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
         self.tableView.register(SettingsCell.self, forCellReuseIdentifier: reuseIdentifier)
         self.tableView.register(Header.self, forHeaderFooterViewReuseIdentifier: "sectionHeader")
         tableView.tableFooterView = UIView()
+    }
+    
+    func updateServicesAndCharacteristics() {
+        let services = self.peripheral?.services
+        if services != nil {
+            for service in services!{
+                self.services.append(service)
+                for characteristic in service.characteristics! {
+                    print(characteristic, characteristic.value)
+                    characteristics.append(characteristic)
+                }
+            }
+        }
     }
     
     @objc func handleDone() {
@@ -82,6 +103,8 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
             for service in services!{
                 print(service)
                 for characteristic in service.characteristics! {
+                    print(characteristic, characteristic.value)
+                    characteristics.append(characteristic)
                     let value = characteristic.value ?? nil
                     if value != nil {
                         let data = [UInt8](value!)
@@ -95,13 +118,14 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
         }
     }
     
-    func sendData(data: NSData, characteristic: CBCharacteristic){
-        //        peripheral?.writeValue(data: data, for: CBDescriptor())
+    func sendData(data: NSData){
+        peripheral?.writeValue(data as Data, for: characteristics[0], type: .withResponse)
     }
     
     func refreshChildDevices(){
         var num = NSInteger(1)
         let data = NSData(bytes: &num, length: 1)
+        
 //        peripheral?.writeValue(data as Data, for: , type: .withResponse)
     }
     
@@ -109,7 +133,7 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
         guard let section = SettingsSection(rawValue: indexPath.section) else { return 50 }
         switch section {
         case .DeviceInfo:
-            return 60
+            return 70
         case .Settings:
             return 50
         case .Devices:
@@ -120,15 +144,24 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! SettingsCell
         guard let section = SettingsSection(rawValue: indexPath.section) else { return UITableViewCell() }
-        
         switch section {
         case .DeviceInfo:
-            let deviceInfo = DeviceInfo(rawValue: indexPath.row)
-            cell.sectionType = deviceInfo
-            if deviceInfo!.containsSwitch {
-                cell.selectionStyle = .none
-            }
-            cell.sectionType = deviceInfo
+            cell.switchControl.isHidden = true
+            let nameLabel = UILabel()
+            nameLabel.text = "Name: \(peripheral!.name ?? "N/A")"
+            nameLabel.translatesAutoresizingMaskIntoConstraints = false
+            cell.addSubview(nameLabel)
+            nameLabel.topAnchor.constraint(equalTo: cell.topAnchor, constant: 10).isActive = true
+            nameLabel.leftAnchor.constraint(equalTo: cell.leftAnchor, constant: 16).isActive = true
+            nameLabel.font = UIFont.systemFont(ofSize: 16)
+            let idLabel = UILabel()
+            idLabel.translatesAutoresizingMaskIntoConstraints = false
+            idLabel.text = "UUID: \(peripheral!.identifier.uuidString )"
+            cell.addSubview(idLabel)
+            idLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 10).isActive = true
+            idLabel.leftAnchor.constraint(equalTo: cell.leftAnchor, constant: 16).isActive = true
+            idLabel.font = UIFont.systemFont(ofSize: 15)
+            
         case .Settings:
             let settings = Settings(rawValue: indexPath.row)
             if settings!.containsSwitch {
@@ -142,7 +175,6 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
             }
             cell.sectionType = devices
         }
-        
         return cell
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -182,7 +214,7 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
                     let textField = alert.textFields![0]
                     let text = textField.text?.data(using: .utf8)
                     if text != nil {
-//                        self.sendData(data: NSData(data: text!))
+                        self.sendData(data: NSData(data: text!))
                     }
                 }))
                 self.present(alert, animated: true)

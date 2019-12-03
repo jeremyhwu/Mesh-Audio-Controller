@@ -126,14 +126,6 @@ extension BluetoothManager : CBCentralManagerDelegate {
     
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         print("failed to connect")
-        //
-        //        if let error = error {
-        //            log?.error("Failed to connect with error:\(error)")
-        //        } else {
-        //            log?.error("Failed to connect")
-        //        }
-        //
-        //        self.sendDisconnectionNotification()
     }
     
     func centralManager(_ central: CBCentralManager, willRestoreState dict: [String : Any]) {

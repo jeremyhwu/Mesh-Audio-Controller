@@ -240,15 +240,6 @@ extension DevicesViewController : UITableViewDelegate, UITableViewDataSource {
             self.present(alert, animated: true)
         }
     }
-    
-    func connectToDevice(peripheral: CBPeripheral) {
-        cbManager?.connect(peripheral, options: nil)
-    }
-    
-    func disconnectFromDevice(peripheral : CBPeripheral){
-        cbManager?.cancelPeripheralConnection(peripheral)
-    }
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         return self.sections.count
     }

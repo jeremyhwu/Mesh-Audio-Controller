@@ -62,7 +62,7 @@ enum Settings: Int, CaseIterable, SectionType {
         case .rename: return "Rename Device"
         case .mute: return "Mute Device"
         case .getData: return "Grab new data"
-        case .sendData: return "Send data"
+        case .sendData: return "Send Custom Data"
         case .refreshDeviceList: return "Refresh Child Devices"
         }
     }
