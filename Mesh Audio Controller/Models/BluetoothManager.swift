@@ -129,19 +129,13 @@ extension BluetoothManager : CBCentralManagerDelegate {
     }
     
     func centralManager(_ central: CBCentralManager, willRestoreState dict: [String : Any]) {
-        //        if let peripherals = dict[CBCentralManagerRestoredStatePeripheralsKey] as? [CBPeripheral] {
-        //
-        //            for peripheral in peripherals {
-        //
-        //                log?.info("Restored peripheral \(peripheral)")
-        //                if peripheral.state == .connected {
-        //                    self.targetPeripherals.insert(peripheral)
-        //                    self.connectedPeripherals.insert(peripheral)
-        //                    self.sendConnectionNotification()
-        //                }
-        //            }
-        //        }
-        //
+        if let peripherals = dict[CBCentralManagerRestoredStatePeripheralsKey] as? [CBPeripheral] {
+            for peripheral in peripherals {
+                if peripheral.state == .connected {
+                    self.disconnectedPeripherals.insert(peripheral)
+                }
+            }
+        }
     }
 }
 
@@ -154,19 +148,15 @@ extension BluetoothManager : CBPeripheralDelegate {
     }
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
-        //        log?.info("Discovered characteristics")
         guard let characteristics = service.characteristics else { return }
         for characteristic in characteristics {
-            self.characteristics[peripheral]?.insert(characteristic) //keep track of all characteristics in set
+            self.characteristics[peripheral]?.insert(characteristic) // keep track of all characteristics in set
             peripheral.readValue(for: characteristic)
-//            print("CHARACTERISTIC: \(characteristic). Value: \(characteristic.value)")
-            peripheral.setNotifyValue(true, for: characteristic)
+            peripheral.setNotifyValue(true, for: characteristic) // Subscribe to all characteristics
         }
     }
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
-        let value = characteristic.value ?? nil
         nc.post(name: BluetoothManager.characteristicUpdated, object: self, userInfo: ["peripheral":peripheral, "characteristic":characteristic])
     }
-    
 }

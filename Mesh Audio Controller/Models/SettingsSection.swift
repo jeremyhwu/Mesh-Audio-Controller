@@ -5,6 +5,9 @@
 //  Created by jeremy Wu on 11/23/19.
 //  Copyright © 2019 jeremy Wu. All rights reserved.
 //
+
+
+// Enumerables for devicedetailcontroller table sections
 import UIKit
 import CoreBluetooth
 
@@ -71,7 +74,6 @@ enum Settings: Int, CaseIterable, SectionType {
 enum Devices: Int, CaseIterable, SectionType {
     case addDevice
     case removeDevice
-    case device
     
     var containsSwitch: Bool {
         return false
@@ -81,7 +83,6 @@ enum Devices: Int, CaseIterable, SectionType {
         switch self {
         case .addDevice: return "Add Device"
         case .removeDevice: return "Remove Device"
-        case .device: return ""
         }
     }
 }

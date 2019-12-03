@@ -26,13 +26,13 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
     let two = CBUUID(string: "0000ace1-0000-1000-8000-00805f9b34fb")
     let three = CBUUID(string: "0000ace2-0000-1000-8000-00805f9b34fb")
     let deviceList = CBUUID(string: "0000ace2-0000-1000-8000-00805f9b34fb")
-
+    
     var delegate : DeviceDetailDelegate?
     var cell : DeviceCell?
     var peripheral : CBPeripheral?
     var characteristics : [CBCharacteristic] = []
     var services : [CBService] = []
-    var childDevices : [String] = []
+    var childDevices : [String] = ["Device 1", "Device 2", "Device 3", "Device 4"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -126,7 +126,7 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
         var num = NSInteger(1)
         let data = NSData(bytes: &num, length: 1)
         
-//        peripheral?.writeValue(data as Data, for: , type: .withResponse)
+        //        peripheral?.writeValue(data as Data, for: , type: .withResponse)
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -143,6 +143,8 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! SettingsCell
+        cell.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
+        cell.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
         guard let section = SettingsSection(rawValue: indexPath.section) else { return UITableViewCell() }
         switch section {
         case .DeviceInfo:
@@ -169,11 +171,24 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
             }
             cell.sectionType = settings
         case .Devices:
-            let devices = Devices(rawValue: indexPath.row)
-            if devices!.containsSwitch {
-                cell.selectionStyle = .none
+            let row = indexPath.row
+            if row < Devices.allCases.count{
+                let devices = Devices(rawValue: indexPath.row)
+                if devices!.containsSwitch {
+                    cell.selectionStyle = .none
+                }
+                cell.sectionType = devices
             }
-            cell.sectionType = devices
+            else{
+                cell.switchControl.isHidden = true
+                let childName = childDevices[row - Devices.allCases.count]
+                let childLabel = UILabel()
+                childLabel.text = childName
+                childLabel.translatesAutoresizingMaskIntoConstraints = false
+                cell.addSubview(childLabel)
+                childLabel.centerYAnchor.constraint(equalTo: cell.centerYAnchor).isActive = true
+                childLabel.leftAnchor.constraint(equalTo: cell.leftAnchor, constant: 16).isActive = true
+            }
         }
         return cell
     }
@@ -219,7 +234,12 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
                 }))
                 self.present(alert, animated: true)
             case .refreshDeviceList:
-                break
+                let alert = UIAlertController(title: "Refresh child device list?", message: nil, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "No", style: .default, handler: nil))
+                alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action: UIAlertAction) -> Void in
+                    // Todo: logic for refreshing device list
+                }))
+                self.present(alert, animated: true)
             }
         case .Devices:
             let devices = Devices(rawValue: indexPath.row)
@@ -244,7 +264,7 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
         case .Settings:
             return Settings.allCases.count
         case .Devices:
-            return Devices.allCases.count
+            return Devices.allCases.count + childDevices.count
         }
     }
     override func numberOfSections(in tableView: UITableView) -> Int {
