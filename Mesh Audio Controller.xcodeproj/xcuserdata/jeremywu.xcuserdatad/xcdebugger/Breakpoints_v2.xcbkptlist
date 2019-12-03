@@ -101,110 +101,46 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "6CCAC267-437A-4142-ADFB-542DC16DDF31"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Mesh Audio Controller/Views/DeviceInfoHeader.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "31"
-            endingLineNumber = "31"
-            landmarkName = "init(frame:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "9D3F3889-F06C-4A6E-A254-1DAF03378E54"
+            uuid = "036F2D42-BDA7-48CB-AB61-CC210EC0334C"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Mesh Audio Controller/Controllers/DevicesViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "195"
-            endingLineNumber = "195"
-            landmarkName = "DevicesViewController"
-            landmarkType = "21">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "A10CC8F7-40BE-4661-8626-9FFD30C6A4E6"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Mesh Audio Controller/Controllers/DevicesViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "235"
-            endingLineNumber = "235"
-            landmarkName = "centralManager(_:didConnect:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "C77BBDEE-7C14-49BA-8BCD-394E4ED17004"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Mesh Audio Controller/Controllers/DevicesViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "234"
-            endingLineNumber = "234"
-            landmarkName = "centralManager(_:didConnect:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "1373E387-58A0-4433-8263-D3081079D2BE"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Mesh Audio Controller/Controllers/DevicesViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "236"
-            endingLineNumber = "236"
-            landmarkName = "centralManager(_:didConnect:)"
+            startingLineNumber = "60"
+            endingLineNumber = "60"
+            landmarkName = "configureNotifications()"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "1373E387-58A0-4433-8263-D3081079D2BE - 4a5bdb8be245f05f"
+                  uuid = "036F2D42-BDA7-48CB-AB61-CC210EC0334C - 1aab772ce8018914"
                   shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Mesh_Audio_Controller.DevicesViewController.centralManager(_: __C.CBCentralManager, didConnect: __C.CBPeripheral) -&gt; ()"
+                  symbolName = "closure #1 () -&gt; () in closure #2 (Foundation.Notification) -&gt; () in Mesh_Audio_Controller.DevicesViewController.configureNotifications() -&gt; ()"
                   moduleName = "Mesh Audio Controller"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/jeremywu/SeniorProject/MeshAudioController/Mesh%20Audio%20Controller/Controllers/DevicesViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "238"
-                  endingLineNumber = "238"
-                  offsetFromSymbolStart = "864">
+                  startingLineNumber = "68"
+                  endingLineNumber = "68"
+                  offsetFromSymbolStart = "912">
                </Location>
                <Location
-                  uuid = "1373E387-58A0-4433-8263-D3081079D2BE - 34556ca57785b774"
+                  uuid = "036F2D42-BDA7-48CB-AB61-CC210EC0334C - e0cf65b89976f35a"
                   shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Mesh_Audio_Controller.Device) -&gt; Swift.Bool in Mesh_Audio_Controller.DevicesViewController.centralManager(_: __C.CBCentralManager, didConnect: __C.CBPeripheral) -&gt; ()"
+                  symbolName = "closure #1 (Mesh_Audio_Controller.Device) -&gt; Swift.Bool in closure #1 () -&gt; () in closure #2 (Foundation.Notification) -&gt; () in Mesh_Audio_Controller.DevicesViewController.configureNotifications() -&gt; ()"
                   moduleName = "Mesh Audio Controller"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/jeremywu/SeniorProject/MeshAudioController/Mesh%20Audio%20Controller/Controllers/DevicesViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "238"
-                  endingLineNumber = "238"
+                  startingLineNumber = "68"
+                  endingLineNumber = "68"
                   offsetFromSymbolStart = "108">
                </Location>
             </Locations>
@@ -213,94 +149,111 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "CEE79CEE-D9E7-4587-A97F-0ECD3B4AA781"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Mesh Audio Controller/Views/DeviceInfoHeader.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "32"
-            endingLineNumber = "32"
-            landmarkName = "init(frame:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "ABB9679B-1BD8-4E0C-B4BA-3415C6F7E9CA"
+            uuid = "FCA4E614-E8FC-4042-8DF6-BBACDC68EB0F"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Mesh Audio Controller/Controllers/DeviceDetailController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "115"
-            endingLineNumber = "115"
-            landmarkName = "peripheral(_:didUpdateValueFor:error:)"
+            startingLineNumber = "43"
+            endingLineNumber = "43"
+            landmarkName = "viewDidLoad()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "C57E4558-8B14-4459-A6C8-6B6ACB4EB20E"
+            uuid = "D933D321-251B-4149-B197-8C9313905DBE"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Mesh Audio Controller/Controllers/DeviceDetailController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "96"
-            endingLineNumber = "96"
-            landmarkName = "peripheral(_:didUpdateValueFor:error:)"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
+            landmarkName = "configureNotifications()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "30207548-94CD-4DA2-BE28-FE74DCECE68F"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Mesh Audio Controller/Views/SettingsCell.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "30"
+            endingLineNumber = "30"
+            landmarkName = "init(style:reuseIdentifier:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "BB7F0B22-5259-460A-9DA1-5BC6A8685780"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Mesh Audio Controller/Views/SettingsCell.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "31"
+            endingLineNumber = "31"
+            landmarkName = "init(style:reuseIdentifier:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C902FF68-D354-413D-9E33-36EB9DC5F383"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Mesh Audio Controller/Controllers/DevicesViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "220"
+            endingLineNumber = "220"
+            landmarkName = "tableView(_:didSelectRowAt:)"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "C57E4558-8B14-4459-A6C8-6B6ACB4EB20E - eb7d1fe899befcc5"
+                  uuid = "C902FF68-D354-413D-9E33-36EB9DC5F383 - bbfdb3e6b2d7d159"
                   shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Mesh_Audio_Controller.DeviceDetailController.peripheral(_: __C.CBPeripheral, didUpdateValueFor: __C.CBCharacteristic, error: Swift.Optional&lt;Swift.Error&gt;) -&gt; ()"
+                  symbolName = "Mesh_Audio_Controller.DevicesViewController.tableView(_: __C.UITableView, didSelectRowAt: Foundation.IndexPath) -&gt; ()"
                   moduleName = "Mesh Audio Controller"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/jeremywu/SeniorProject/MeshAudioController/Mesh%20Audio%20Controller/Controllers/DeviceDetailController.swift"
+                  urlString = "file:///Users/jeremywu/SeniorProject/MeshAudioController/Mesh%20Audio%20Controller/Controllers/DevicesViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "85"
-                  endingLineNumber = "85"
-                  offsetFromSymbolStart = "232">
+                  startingLineNumber = "226"
+                  endingLineNumber = "226"
+                  offsetFromSymbolStart = "1376">
                </Location>
                <Location
-                  uuid = "C57E4558-8B14-4459-A6C8-6B6ACB4EB20E - eb7d1fe899befcc5"
+                  uuid = "C902FF68-D354-413D-9E33-36EB9DC5F383 - 644006c3e7adeb8a"
                   shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Mesh_Audio_Controller.DeviceDetailController.peripheral(_: __C.CBPeripheral, didUpdateValueFor: __C.CBCharacteristic, error: Swift.Optional&lt;Swift.Error&gt;) -&gt; ()"
+                  symbolName = "closure #2 (__C.CBPeripheral) -&gt; Swift.Bool in Mesh_Audio_Controller.DevicesViewController.tableView(_: __C.UITableView, didSelectRowAt: Foundation.IndexPath) -&gt; ()"
                   moduleName = "Mesh Audio Controller"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/jeremywu/SeniorProject/MeshAudioController/Mesh%20Audio%20Controller/Controllers/DeviceDetailController.swift"
+                  urlString = "file:///Users/jeremywu/SeniorProject/MeshAudioController/Mesh%20Audio%20Controller/Controllers/DevicesViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "85"
-                  endingLineNumber = "85"
-                  offsetFromSymbolStart = "300">
-               </Location>
-               <Location
-                  uuid = "C57E4558-8B14-4459-A6C8-6B6ACB4EB20E - eb7d1fe899befcc5"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Mesh_Audio_Controller.DeviceDetailController.peripheral(_: __C.CBPeripheral, didUpdateValueFor: __C.CBCharacteristic, error: Swift.Optional&lt;Swift.Error&gt;) -&gt; ()"
-                  moduleName = "Mesh Audio Controller"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/jeremywu/SeniorProject/MeshAudioController/Mesh%20Audio%20Controller/Controllers/DeviceDetailController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "85"
-                  endingLineNumber = "85"
-                  offsetFromSymbolStart = "892">
+                  startingLineNumber = "226"
+                  endingLineNumber = "226"
+                  offsetFromSymbolStart = "196">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -308,15 +261,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "82193E17-5B4B-4AA6-BBAD-2BE5D42E98A2"
+            uuid = "0C87EA38-A4D2-4B8D-AE54-95F3E9D6D56D"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Mesh Audio Controller/Controllers/DeviceDetailController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "84"
-            endingLineNumber = "84"
+            startingLineNumber = "108"
+            endingLineNumber = "108"
             landmarkName = "getData()"
             landmarkType = "7">
          </BreakpointContent>
@@ -324,15 +277,31 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "1F31BE60-D9C3-438F-AC35-7187486260F5"
+            uuid = "F18248D3-156D-4A06-A917-CE92A2E883CE"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Mesh Audio Controller/Controllers/DeviceDetailController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "73"
-            endingLineNumber = "73"
+            startingLineNumber = "122"
+            endingLineNumber = "122"
+            landmarkName = "sendData(data:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B511AC2E-279D-40A8-8E9B-A8F0F4A004B4"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Mesh Audio Controller/Controllers/DeviceDetailController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "107"
+            endingLineNumber = "107"
             landmarkName = "getData()"
             landmarkType = "7">
          </BreakpointContent>
@@ -340,32 +309,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "ED4EA253-A099-48D1-A688-EA189AA798C1"
+            uuid = "CF366B84-C1BC-4276-A3D8-7D2C69AE7F7D"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Mesh Audio Controller/Controllers/DeviceDetailController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "75"
-            endingLineNumber = "75"
-            landmarkName = "getData()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "EE5646A9-8110-435E-ABDA-0F1EDA732029"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Mesh Audio Controller/Controllers/DeviceDetailController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "77"
-            endingLineNumber = "77"
-            landmarkName = "getData()"
+            startingLineNumber = "152"
+            endingLineNumber = "152"
+            landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -40,18 +40,7 @@ class DeviceCell: UITableViewCell {
     }
     
     func configureLabels() {
-        deviceIDLabel.font = UIFont.preferredFont(forTextStyle: .headline)
-        deviceIDLabel.adjustsFontForContentSizeCategory = true
-        
-        guard let palatino = UIFont(name: "Palatino", size: 18) else {
-            fatalError("""
-                Failed to load the "Palatino" font.
-                Since this font is included with all versions of iOS that support Dynamic Type, verify that the spelling and casing is correct.
-                """
-            )
-        }
         deviceNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        deviceNameLabel.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: palatino)
         deviceNameLabel.adjustsFontForContentSizeCategory = true
         deviceNameLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         deviceNameLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 16).isActive = true

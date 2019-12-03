@@ -15,17 +15,10 @@ protocol DeviceDetailDelegate {
 }
 
 class DevicesViewController: UIViewController {
-    fileprivate var bluetoothManager = BluetoothManager.sharedManager
+    private let bluetoothManager = BluetoothManager.sharedManager
+    let nc = NotificationCenter.default
     
     var tableView = UITableView()
-    var cbManager: CBCentralManager!
-    var peripheralManager: CBPeripheralManager!
-    var cbState = CBManagerState.unknown
-    var cbPeripherals = [CBPeripheral]()
-    var RSSIs = [NSNumber]()
-    var characteristicValue = [CBUUID: NSData]()
-    var characteristics = [String : CBCharacteristic]()
-    var services : [CBUUID]?
     var dataSource : UITableViewDataSource?
     var timer = Timer()
     var cells = [[Device]]()
@@ -43,18 +36,99 @@ class DevicesViewController: UIViewController {
         "disconnecting"
     ]
     
-    let nc = NotificationCenter.default
-    
     enum TableSection : Int {
         case action = 0, Disconnected
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureNotifications()
         configureTableView()
-        configureBluetooth()
         configureRefreshControl()
         configureVars()
+        bluetoothManager.scan()
+    }
+    
+    func configureNotifications() {
+        nc.addObserver(forName: BluetoothManager.deviceConnected, object: nil, queue: OperationQueue.main) { (notification) in
+            let peripheral = notification.userInfo!["peripheral"] as! CBPeripheral
+            self.deviceConnected(peripheral: peripheral)
+        }
+        nc.addObserver(forName: BluetoothManager.deviceDisconnected, object: nil, queue: OperationQueue.main) { (notification) in
+            DispatchQueue.main.async {
+                let peripheral = notification.userInfo!["peripheral"] as! CBPeripheral
+                if let index = self.cells[self.connected].firstIndex(where: {$0.name == peripheral.name && $0.id == peripheral.identifier.uuidString}) {
+                    self.cells[self.connected].remove(at: index)
+                }
+                let alert = UIAlertController(title: "Disconnected from \(peripheral.name ?? "Unknown")", message: "Disconnected from device with id: \(peripheral.identifier).", preferredStyle: .alert)
+                let action = UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: { (action: UIAlertAction) -> Void in
+                    self.cells[self.disconnected] = [Device]()
+                    self.tableView.reloadData()
+                    self.bluetoothManager.refresh()
+                })
+                alert.addAction(action)
+                self.present(alert, animated: true)
+            }
+        }
+        nc.addObserver(forName: BluetoothManager.btDisabled, object: nil, queue: OperationQueue.main) { (notification) in
+            let alert = UIAlertController(title: "Bluetooth is not enabled", message: "Enable Bluetooth to start scanning", preferredStyle: UIAlertController.Style.alert)
+            let action = UIAlertAction(title: "ok", style: UIAlertAction.Style.default, handler: { (action: UIAlertAction) -> Void in
+                self.dismiss(animated: true, completion: nil)
+            })
+            alert.addAction(action)
+            self.present(alert, animated: true, completion: nil)
+        }
+        nc.addObserver(self, selector: #selector(self.scanStarted), name: BluetoothManager.scanStarted, object: nil)
+        nc.addObserver(self, selector: #selector(self.scanEnded), name: BluetoothManager.scanEnded, object: nil)
+        
+    }
+    
+    @objc func scanStarted() {
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: "Scanning", message: "Scanning for nearby bluetooth devices.", preferredStyle: .alert)
+            self.present(alert, animated: true)
+        }
+    }
+    
+    @objc func scanEnded() {
+        DispatchQueue.main.async {
+            self.dismiss(animated: true, completion: nil)
+            self.tableView.refreshControl?.endRefreshing()
+            for peripheral in self.bluetoothManager.disconnectedPeripherals {
+                if !self.cells[self.connected].contains(where: {$0.id == peripheral.identifier.uuidString}) {
+                    self.cells[self.disconnected].append(Device(name: peripheral.name ?? "Unknown", id: peripheral.identifier.uuidString, state: self.peripheralState[peripheral.state.rawValue], peripheral: peripheral))
+                }
+            }
+            self.tableView.reloadData()
+        }
+    }
+    
+    func deviceConnected(peripheral: CBPeripheral){
+        DispatchQueue.main.async {
+            //Move device into connected section
+            if let index = self.cells[self.disconnected].firstIndex(where: {$0.name == peripheral.name && $0.id == peripheral.identifier.uuidString}) {
+                self.cells[self.connected].append(self.cells[self.disconnected][index])
+                self.cells[self.disconnected].remove(at: index)
+                self.tableView.reloadData()
+            }
+            let alert = UIAlertController(title: "Connected to \(peripheral.name ?? "Unkown")", message: "Connected to device with id: \(peripheral.identifier.uuidString).", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+            self.present(alert, animated: true)
+        }
+    }
+    
+    func deviceDisconnected(peripheral: CBPeripheral){
+        DispatchQueue.main.async {
+            //Move device into connected section
+            if let index = self.cells[self.disconnected].firstIndex(where: {$0.name == peripheral.name && $0.id == peripheral.identifier.uuidString}) {
+                self.cells[self.connected].append(self.cells[self.disconnected][index])
+                self.cells[self.disconnected].remove(at: index)
+                self.tableView.reloadData()
+            }
+            let alert = UIAlertController(title: "Connected to \(peripheral.name ?? "Unkown")", message: "Connected to device with id: \(peripheral.identifier.uuidString).", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+            self.present(alert, animated: true)
+        }
     }
     
     func configureVars() {
@@ -76,11 +150,6 @@ class DevicesViewController: UIViewController {
         tableView.pin(to: view)
     }
     
-    func configureBluetooth() {
-        cbManager = CBCentralManager(delegate: self, queue: nil)
-        peripheralManager = CBPeripheralManager(delegate: self, queue: nil)
-    }
-    
     func configureRefreshControl() {
         tableView.refreshControl = refreshControl
         tableView.refreshControl?.addTarget(self, action:
@@ -96,38 +165,11 @@ class DevicesViewController: UIViewController {
             }
         }))
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (UIAlertAction) in
-            self.cbPeripherals = []
             self.cells[self.disconnected] = [Device]()
             self.tableView.reloadData()
-            self.scan()
+            self.bluetoothManager.refresh()
         }))
         self.present(alert, animated: true)
-    }
-    
-    
-    func scan(){
-        print("Scanning for devices")
-        //        cbManager.scanForPeripherals(withServices: [BTConstants.ServiceUUID], options: nil)
-        cbManager.scanForPeripherals(withServices: nil, options: nil)
-        let alert = UIAlertController(title: "Scanning", message: "Scanning for nearby bluetooth devices.", preferredStyle: .alert)
-        self.present(alert, animated: true)
-        timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { (timer) in
-            self.stopscan()
-        }
-    }
-    func stopscan(){
-        self.dismiss(animated: true, completion: nil)
-        timer.invalidate()
-        cbManager.stopScan()
-        DispatchQueue.main.async {
-            self.tableView.refreshControl?.endRefreshing()
-        }
-        for (peripheral) in cbPeripherals{
-            if !cells[connected].contains(where: {$0.id == peripheral.identifier.uuidString}) {
-                cells[disconnected].append(Device(name: peripheral.name ?? "Unknown", id: peripheral.identifier.uuidString, state: peripheralState[peripheral.state.rawValue], peripheral: peripheral))
-            }
-        }
-        self.tableView.reloadData()
     }
 }
 
@@ -138,7 +180,7 @@ extension DevicesViewController : DeviceDetailDelegate {
     
     func disconnect(peripheral: CBPeripheral, controller: DeviceDetailController) {
         controller.dismiss(animated: true, completion: nil)
-        self.disconnectFromDevice(peripheral: peripheral)
+        self.bluetoothManager.disconnect(peripheral: peripheral)
     }
 }
 
@@ -159,7 +201,7 @@ extension DevicesViewController : UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "DeviceCell") as! DeviceCell 
+        let cell = tableView.dequeueReusableCell(withIdentifier: "DeviceCell") as! DeviceCell
         let device = cells[indexPath.section][indexPath.row]
         cell.set(device: device)
         return cell
@@ -173,7 +215,9 @@ extension DevicesViewController : UITableViewDelegate, UITableViewDataSource {
             let vc = DeviceDetailController()
             vc.delegate = self
             vc.cell = cell
-            vc.peripheral = cell.peripheral
+            let peripheral = bluetoothManager.connectedPeripherals.first(where: {$0.identifier == cell.peripheral?.identifier }) //grab updated peripheral (connecting to it has updated the characteristic values)
+            cell.peripheral = peripheral
+            vc.peripheral = peripheral
             let deviceDetailController = UINavigationController(rootViewController: vc)
             self.present(deviceDetailController, animated: true, completion: nil)
         }
@@ -181,106 +225,14 @@ extension DevicesViewController : UITableViewDelegate, UITableViewDataSource {
             let alert = UIAlertController(title: "Connect to \(cell.name)?", message: "Connect to device with id: \(cell.id)?", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "No", style: .default, handler: nil))
             alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (UIAlertAction) in
-                let peripheral = self.cells[indexPath.section][indexPath.row]
-                if let index = self.cbPeripherals.firstIndex(
-                    where: {$0.name == peripheral.name && $0.identifier.uuidString == peripheral.id}) {
-                    self.cells[self.disconnected].remove(at: indexPath.row)
-                    self.cells[self.connected].append(peripheral)
-                    self.connectToDevice(peripheral: self.cbPeripherals[index])
+                if let peripheral = self.bluetoothManager.disconnectedPeripherals.first(where: {$0.identifier.uuidString == cell.id}) {
+                    self.bluetoothManager.connect(peripheral: peripheral)
                 }
             }))
             self.present(alert, animated: true)
         }
     }
-    
-    func connectToDevice(peripheral: CBPeripheral) {
-        cbManager?.connect(peripheral, options: nil)
-    }
-    
-    func disconnectFromDevice(peripheral : CBPeripheral){
-        cbManager?.cancelPeripheralConnection(peripheral)
-    }
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         return self.sections.count
-    }
-    
-}
-
-extension DevicesViewController : CBCentralManagerDelegate {
-    func centralManagerDidUpdateState(_ central: CBCentralManager) {
-        if (central.state == .poweredOn){  //bluetooth is on, scanning can start
-            scan()
-        }
-        else {
-            let alertVC = UIAlertController(title: "Bluetooth is not enabled", message: "Enable Bluetooth to start scanning", preferredStyle: UIAlertController.Style.alert)
-            let action = UIAlertAction(title: "ok", style: UIAlertAction.Style.default, handler: { (action: UIAlertAction) -> Void in
-                self.dismiss(animated: true, completion: nil)
-            })
-            alertVC.addAction(action)
-            self.present(alertVC, animated: true, completion: nil)
-        }
-    }
-    
-    func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        if !cbPeripherals.contains(where: {$0.identifier == peripheral.identifier}){
-            if peripheral.name != nil {
-                peripheral.delegate = self
-                cbPeripherals.append(peripheral)
-            }
-        }
-    }
-    
-    func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
-        print("connected to peripheral")
-        
-        // Move from disconnected to connected
-        if let index = cells[disconnected].firstIndex(where: {$0.name == peripheral.name && $0.id == peripheral.identifier.uuidString}) {
-            cells[connected].append(cells[disconnected][index])
-            cells[disconnected].remove(at: index)
-        }
-        self.tableView.reloadData()
-        let alert = UIAlertController(title: "Connected to \(peripheral.name ?? "Unkown")", message: "Connected to device with id: \(peripheral.identifier).", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
-        self.present(alert, animated: true)
-    }
-    
-    func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
-        print("failed to connect to peripheral")
-        let alert = UIAlertController(title: "Unable to connect to \(peripheral.name ?? "Unknown") ", message: "Cannot connect to device with id: \(peripheral.identifier).", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
-        self.present(alert, animated: true)
-    }
-    
-    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-        if let index = cells[connected].firstIndex(where: {$0.name == peripheral.name && $0.id == peripheral.identifier.uuidString}) {
-            cells[disconnected].append(cells[connected][index])
-            cells[connected].remove(at: index)
-        }
-        self.tableView.reloadData()
-        let alert = UIAlertController(title: "Disconnected from \(peripheral.name ?? "Unknown")", message: "Disconnected from device with id: \(peripheral.identifier).", preferredStyle: .alert)
-        let action = UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: { (action: UIAlertAction) -> Void in
-            self.cbPeripherals = []
-            self.cells[self.disconnected] = [Device]()
-            self.tableView.reloadData()
-            self.scan()
-        })
-        alert.addAction(action)
-        self.present(alert, animated: true)
-        print("disconnected from peripheral")
-    }
-}
-
-extension DevicesViewController : CBPeripheralDelegate {
-    func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
-        print(peripheral.services as Any)
-    }
-}
-
-extension DevicesViewController : CBPeripheralManagerDelegate {
-    func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
-        if (peripheral.state == .poweredOn){
-            
-        }
     }
 }
