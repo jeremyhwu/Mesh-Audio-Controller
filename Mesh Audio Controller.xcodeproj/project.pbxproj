@@ -14,8 +14,6 @@
 		1A7EC08D23613E4D00B2B136 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7EC08C23613E4D00B2B136 /* SceneDelegate.swift */; };
 		1A7EC09423613E4E00B2B136 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A7EC09323613E4E00B2B136 /* Assets.xcassets */; };
 		1A7EC09723613E4E00B2B136 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A7EC09523613E4E00B2B136 /* LaunchScreen.storyboard */; };
-		1A7EC0A223613E4E00B2B136 /* Mesh_Audio_ControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7EC0A123613E4E00B2B136 /* Mesh_Audio_ControllerTests.swift */; };
-		1A7EC0AD23613E4E00B2B136 /* Mesh_Audio_ControllerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7EC0AC23613E4E00B2B136 /* Mesh_Audio_ControllerUITests.swift */; };
 		1A7EC0BB23613FFC00B2B136 /* DevicesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7EC0BA23613FFC00B2B136 /* DevicesViewController.swift */; };
 		1A7EC0BE2361420900B2B136 /* UIViewExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7EC0BD2361420900B2B136 /* UIViewExt.swift */; };
 		1A7EC0C22361434B00B2B136 /* DeviceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7EC0C12361434B00B2B136 /* DeviceCell.swift */; };
@@ -54,11 +52,7 @@
 		1A7EC09623613E4E00B2B136 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1A7EC09823613E4E00B2B136 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1A7EC09D23613E4E00B2B136 /* Mesh Audio ControllerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Mesh Audio ControllerTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		1A7EC0A123613E4E00B2B136 /* Mesh_Audio_ControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mesh_Audio_ControllerTests.swift; sourceTree = "<group>"; };
-		1A7EC0A323613E4E00B2B136 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1A7EC0A823613E4E00B2B136 /* Mesh Audio ControllerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Mesh Audio ControllerUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		1A7EC0AC23613E4E00B2B136 /* Mesh_Audio_ControllerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mesh_Audio_ControllerUITests.swift; sourceTree = "<group>"; };
-		1A7EC0AE23613E4E00B2B136 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1A7EC0BA23613FFC00B2B136 /* DevicesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicesViewController.swift; sourceTree = "<group>"; };
 		1A7EC0BD2361420900B2B136 /* UIViewExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExt.swift; sourceTree = "<group>"; };
 		1A7EC0C12361434B00B2B136 /* DeviceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceCell.swift; sourceTree = "<group>"; };
@@ -109,8 +103,6 @@
 			isa = PBXGroup;
 			children = (
 				1A7EC08923613E4D00B2B136 /* Mesh Audio Controller */,
-				1A7EC0A023613E4E00B2B136 /* Mesh Audio ControllerTests */,
-				1A7EC0AB23613E4E00B2B136 /* Mesh Audio ControllerUITests */,
 				1A7EC08823613E4D00B2B136 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -139,24 +131,6 @@
 				1A7EC09823613E4E00B2B136 /* Info.plist */,
 			);
 			path = "Mesh Audio Controller";
-			sourceTree = "<group>";
-		};
-		1A7EC0A023613E4E00B2B136 /* Mesh Audio ControllerTests */ = {
-			isa = PBXGroup;
-			children = (
-				1A7EC0A123613E4E00B2B136 /* Mesh_Audio_ControllerTests.swift */,
-				1A7EC0A323613E4E00B2B136 /* Info.plist */,
-			);
-			path = "Mesh Audio ControllerTests";
-			sourceTree = "<group>";
-		};
-		1A7EC0AB23613E4E00B2B136 /* Mesh Audio ControllerUITests */ = {
-			isa = PBXGroup;
-			children = (
-				1A7EC0AC23613E4E00B2B136 /* Mesh_Audio_ControllerUITests.swift */,
-				1A7EC0AE23613E4E00B2B136 /* Info.plist */,
-			);
-			path = "Mesh Audio ControllerUITests";
 			sourceTree = "<group>";
 		};
 		1A7EC0BC236141E600B2B136 /* Extensions and Utilities */ = {
@@ -337,7 +311,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1A7EC0A223613E4E00B2B136 /* Mesh_Audio_ControllerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -345,7 +318,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1A7EC0AD23613E4E00B2B136 /* Mesh_Audio_ControllerUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
