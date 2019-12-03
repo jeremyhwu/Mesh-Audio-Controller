@@ -46,7 +46,7 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
         nc.addObserver(forName: BluetoothManager.characteristicUpdated, object: nil, queue: OperationQueue.main) { (notification) in
             let characteristic = notification.userInfo!["characteristic"] as! CBCharacteristic
             let peripheral = notification.userInfo!["peripheral"] as! CBPeripheral
-            print(characteristic.descriptors, characteristic.value)
+            print("Characteristic updated: \(characteristic.uuid)")
             switch characteristic.uuid {
             case self.deviceList:
                 return
@@ -75,9 +75,10 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
         if services != nil {
             for service in services!{
                 self.services.append(service)
-                for characteristic in service.characteristics! {
-                    print(characteristic, characteristic.value)
-                    characteristics.append(characteristic)
+                if service.characteristics != nil{
+                    for characteristic in service.characteristics! {
+                        characteristics.append(characteristic)
+                    }
                 }
             }
         }
@@ -98,18 +99,20 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
     
     //GATT Services
     func getData() {
+        self.peripheral?.discoverServices(nil) //refresh service list
         let services = self.peripheral?.services
         if services != nil {
             for service in services!{
-                print(service)
                 for characteristic in service.characteristics! {
-                    print(characteristic, characteristic.value)
+                    peripheral?.readValue(for: characteristic) // read the most current value from the peripheral
+                    peripheral?.setNotifyValue(true, for: characteristic)
                     characteristics.append(characteristic)
                     let value = characteristic.value ?? nil
                     if value != nil {
                         let data = [UInt8](value!)
-                        print(data)
+                        print("Data for \(characteristic.uuid):", data)
                     }
+                    // ToDelete: testing write
                     var num = NSInteger(1)
                     let data = NSData(bytes: &num, length: 1)
                     peripheral?.writeValue(data as Data, for: characteristic, type: .withResponse)
@@ -201,7 +204,7 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
             let settings = Settings(rawValue: indexPath.row)
             switch settings {
             case .rename:
-                let alert = UIAlertController(title: "Rename this device?", message: nil, preferredStyle: .alert)
+                let alert = UIAlertController(title: "Rename \(peripheral!.name ?? "N/A")?", message: nil, preferredStyle: .alert)
                 alert.addTextField { (textField) in
                     textField.placeholder = "Enter a new name"
                 }
@@ -211,7 +214,7 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
             case .mute:
                 return
             case .getData:
-                let alert = UIAlertController(title: "Grab new data?", message: nil, preferredStyle: .alert)
+                let alert = UIAlertController(title: "Retrieve new data from the peripheral?", message: nil, preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "No", style: .default, handler: nil))
                 alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action: UIAlertAction) -> Void in
                     self.getData()
@@ -233,16 +236,33 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
                     }
                 }))
                 self.present(alert, animated: true)
-            case .refreshDeviceList:
-                let alert = UIAlertController(title: "Refresh child device list?", message: nil, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "No", style: .default, handler: nil))
-                alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action: UIAlertAction) -> Void in
-                    // Todo: logic for refreshing device list
-                }))
-                self.present(alert, animated: true)
             }
         case .Devices:
-            let devices = Devices(rawValue: indexPath.row)
+            let row = indexPath.row
+            if row < Devices.allCases.count{
+                let devices = Devices(rawValue: indexPath.row)
+                switch devices {
+                case .refreshDevices:
+                    let alert = UIAlertController(title: "Refresh child device list?", message: nil, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "No", style: .default, handler: nil))
+                    alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action: UIAlertAction) -> Void in
+                        // Todo: logic for refreshing device list
+                    }))
+                    self.present(alert, animated: true)
+                default:
+                    break
+                }
+            }
+            else{
+                let childName = childDevices[row - Devices.allCases.count]
+                let alert = UIAlertController(title: "Rename \(childName)?", message: nil, preferredStyle: .alert)
+                alert.addTextField { (textField) in
+                    textField.placeholder = "Enter a new name"
+                }
+                alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+                alert.addAction(UIAlertAction(title: "Rename", style: .default, handler: nil))
+                self.present(alert, animated: true)
+            }
         }
     }
     

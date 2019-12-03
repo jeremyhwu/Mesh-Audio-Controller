@@ -45,6 +45,7 @@ class BluetoothManager : NSObject {
     }
     
     func connect(peripheral: CBPeripheral) {
+        peripheral.delegate = self
         self.cbCentralManager.connect(peripheral, options: nil)
     }
     
@@ -112,7 +113,6 @@ extension BluetoothManager : CBCentralManagerDelegate {
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         print("Connected to \(peripheral.name!)")
         self.connectedPeripherals.insert(peripheral)
-        peripheral.delegate = self
         peripheral.discoverServices(nil)
         self.disconnectedPeripherals.remove(peripheral)
         self.sendConnectedNotification(peripheral: peripheral)

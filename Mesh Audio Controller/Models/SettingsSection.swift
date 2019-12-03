@@ -50,7 +50,6 @@ enum Settings: Int, CaseIterable, SectionType {
     case mute
     case getData
     case sendData
-    case refreshDeviceList
     
     var containsSwitch: Bool {
         switch self {
@@ -62,17 +61,16 @@ enum Settings: Int, CaseIterable, SectionType {
     }
     var description: String {
         switch self {
-        case .rename: return "Rename Device"
+        case .rename: return "Rename Device (Root)"
         case .mute: return "Mute Device"
-        case .getData: return "Grab new data"
+        case .getData: return "Retrieve New Data"
         case .sendData: return "Send Custom Data"
-        case .refreshDeviceList: return "Refresh Child Devices"
         }
     }
 }
 
 enum Devices: Int, CaseIterable, SectionType {
-    case addDevice
+    case refreshDevices
     case removeDevice
     
     var containsSwitch: Bool {
@@ -81,7 +79,7 @@ enum Devices: Int, CaseIterable, SectionType {
     
     var description: String {
         switch self {
-        case .addDevice: return "Add Device"
+        case .refreshDevices: return "Refresh Device List"
         case .removeDevice: return "Remove Device"
         }
     }
