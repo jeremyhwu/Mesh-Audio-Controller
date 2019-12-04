@@ -27,6 +27,7 @@ class BluetoothManager : NSObject {
     static let deviceDisconnected = NSNotification.Name("DISCONNECTED_NOTIFICATION")
     static let btDisabled = NSNotification.Name("BT_DISABLED")
     static let characteristicUpdated = NSNotification.Name("CHARACTERISTIC_UPDATED")
+    static let wroteValue = NSNotification.Name("WROTE_VALUE")
     
     //Peripherals/characteristic storage
     var cbCentralManager: CBCentralManager!
@@ -158,5 +159,9 @@ extension BluetoothManager : CBPeripheralDelegate {
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         nc.post(name: BluetoothManager.characteristicUpdated, object: self, userInfo: ["peripheral":peripheral, "characteristic":characteristic])
+    }
+
+    func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
+        nc.post(name: BluetoothManager.wroteValue, object: self, userInfo: ["peripheral":peripheral, "characteristic":characteristic])
     }
 }

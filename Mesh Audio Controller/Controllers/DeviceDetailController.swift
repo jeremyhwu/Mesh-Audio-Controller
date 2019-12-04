@@ -45,7 +45,6 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
     func configureNotifications() {
         nc.addObserver(forName: BluetoothManager.characteristicUpdated, object: nil, queue: OperationQueue.main) { (notification) in
             let characteristic = notification.userInfo!["characteristic"] as! CBCharacteristic
-            let peripheral = notification.userInfo!["peripheral"] as! CBPeripheral
             print("Characteristic updated: \(characteristic.uuid)")
             switch characteristic.uuid {
             case self.deviceList:
@@ -54,7 +53,13 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
                 return
             }
         }
-        
+        nc.addObserver(forName: BluetoothManager.wroteValue, object: nil, queue: OperationQueue.main) { (notification) in
+            let characteristic = notification.userInfo!["characteristic"] as! CBCharacteristic
+            let data = [UInt8](characteristic.value!)
+            let alert = UIAlertController(title: "Succesfully wrote value \(data) to characteristic: \(characteristic.uuid)", message: nil, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+            self.present(alert, animated: true)
+        }
     }
     
     func configureUI(){
@@ -105,24 +110,19 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
             for service in services!{
                 for characteristic in service.characteristics! {
                     peripheral?.readValue(for: characteristic) // read the most current value from the peripheral
-                    peripheral?.setNotifyValue(true, for: characteristic)
                     characteristics.append(characteristic)
                     let value = characteristic.value ?? nil
                     if value != nil {
                         let data = [UInt8](value!)
                         print("Data for \(characteristic.uuid):", data)
                     }
-                    // ToDelete: testing write
-                    var num = NSInteger(1)
-                    let data = NSData(bytes: &num, length: 1)
-                    peripheral?.writeValue(data as Data, for: characteristic, type: .withResponse)
                 }
             }
         }
     }
     
     func sendData(data: NSData){
-        peripheral?.writeValue(data as Data, for: characteristics[0], type: .withResponse)
+        peripheral?.writeValue(data as Data, for: characteristics[1], type: .withResponse)
     }
     
     func refreshChildDevices(){
