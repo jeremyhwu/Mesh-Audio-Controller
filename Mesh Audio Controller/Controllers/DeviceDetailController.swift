@@ -124,6 +124,7 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
                 }
             }
         }
+        self.tableView.reloadData()
     }
     
     func sendData(data: NSData, characteristic: CBCharacteristic?){
@@ -183,7 +184,7 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
             servicesLabel.translatesAutoresizingMaskIntoConstraints = false
             let serviceNames = services.map{$0.uuid}
             servicesLabel.text = "Services: \(serviceNames)"
-            servicesLabel.font = UIFont.systemFont(ofSize: 14)
+            servicesLabel.font = UIFont.systemFont(ofSize: 14   )
             cell.addSubview(servicesLabel)
             servicesLabel.leadingAnchor.constraint(equalTo: cell.leadingAnchor, constant: 10).isActive = true
             servicesLabel.trailingAnchor.constraint(equalTo: cell.trailingAnchor).isActive = true
@@ -202,7 +203,7 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
             characteristicsLabel.numberOfLines = 0
             
             cell.bottomAnchor.constraint(equalTo: characteristicsLabel.bottomAnchor, constant: 10).isActive = true
-                
+            
         case .Settings:
             let settings = Settings(rawValue: indexPath.row)
             if settings!.containsSwitch {
@@ -264,17 +265,17 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
                     textField.placeholder = "Enter data"
                 }
                 alert.addTextField { (textField) in
-                    textField.placeholder = "Enter Characteristic"
+                    textField.placeholder = "Enter Characteristic UUID"
                 }
                 alert.addAction(UIAlertAction(title: "No", style: .default, handler: nil))
                 alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action: UIAlertAction) -> Void in
                     let dataField = alert.textFields![0]
                     let text = dataField.text?.data(using: .utf8)
-                    let characteristicField = alert.textFields![1].text!
+                    let characteristicField = CBUUID(string: alert.textFields![1].text!) //create a new CBUUID with the field's data
                     for char in self.characteristics{
                         print(char.uuid)
                     }
-                    let characteristic = self.characteristics.first(where: {$0.uuid.uuidString == characteristicField})
+                    let characteristic = self.characteristics.first(where: {$0.uuid.uuidString == characteristicField.uuidString})
                     if text != nil && characteristic != nil{
                         self.sendData(data: NSData(data: text!), characteristic: characteristic)
                     }
