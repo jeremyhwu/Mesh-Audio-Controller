@@ -57,17 +57,9 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
         nc.addObserver(forName: BluetoothManager.wroteValue, object: nil, queue: OperationQueue.main) { (notification) in
             DispatchQueue.main.async {
                 let characteristic = notification.userInfo!["characteristic"] as! CBCharacteristic
-                if characteristic.value != nil {
-                    let data = [UInt8](characteristic.value!)
-                    let alert = UIAlertController(title: "Succesfully wrote value \(data) to characteristic: \(characteristic.uuid)", message: nil, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
-                    self.present(alert, animated: true)
-                }
-                else {
-                    let alert = UIAlertController(title: "Succesfully wrote value to characteristic: \(characteristic.uuid)", message: nil, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
-                    self.present(alert, animated: true)
-                }
+                let alert = UIAlertController(title: "Succesfully wrote value to characteristic: \(characteristic.uuid)", message: nil, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+                self.present(alert, animated: true)
             }
         }
     }

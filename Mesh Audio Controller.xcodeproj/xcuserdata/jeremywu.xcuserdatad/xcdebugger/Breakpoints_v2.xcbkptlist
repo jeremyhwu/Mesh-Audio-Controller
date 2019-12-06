@@ -204,8 +204,8 @@
             filePath = "Mesh Audio Controller/Controllers/DeviceDetailController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "134"
-            endingLineNumber = "134"
+            startingLineNumber = "126"
+            endingLineNumber = "126"
             landmarkName = "getData()"
             landmarkType = "7">
          </BreakpointContent>
@@ -220,8 +220,8 @@
             filePath = "Mesh Audio Controller/Controllers/DeviceDetailController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "141"
-            endingLineNumber = "141"
+            startingLineNumber = "133"
+            endingLineNumber = "133"
             landmarkName = "sendData(data:characteristic:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -252,8 +252,8 @@
             filePath = "Mesh Audio Controller/Controllers/DeviceDetailController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "222"
-            endingLineNumber = "222"
+            startingLineNumber = "214"
+            endingLineNumber = "214"
             landmarkName = "tableView(_:didSelectRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -268,8 +268,8 @@
             filePath = "Mesh Audio Controller/Controllers/DeviceDetailController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "314"
-            endingLineNumber = "314"
+            startingLineNumber = "306"
+            endingLineNumber = "306"
             landmarkName = "tableView(_:viewForHeaderInSection:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -284,25 +284,9 @@
             filePath = "Mesh Audio Controller/Controllers/DeviceDetailController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "212"
-            endingLineNumber = "212"
+            startingLineNumber = "204"
+            endingLineNumber = "204"
             landmarkName = "tableView(_:didSelectRowAt:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "7A3A480C-C009-4FE7-AE5D-C29ADB7473B2"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Mesh Audio Controller/Models/BluetoothManager.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "166"
-            endingLineNumber = "166"
-            landmarkName = "peripheral(_:didWriteValueFor:error:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
