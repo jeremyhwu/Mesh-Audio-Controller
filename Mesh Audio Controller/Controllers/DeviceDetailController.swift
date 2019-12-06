@@ -187,8 +187,7 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
             let cell = tableView.dequeueReusableCell(withIdentifier: "devicesIdentifier", for: indexPath) as! DevicesCell
             let row = indexPath.row
             if row < Devices.allCases.count{
-                let devices = Devices(rawValue: indexPath.row)
-                cell.sectionType = devices
+                cell.childLabel.text = "Refresh Device List"
             }
             else{
                 let childName = childDevices[row - Devices.allCases.count]

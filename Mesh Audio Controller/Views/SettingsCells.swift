@@ -7,45 +7,6 @@
 //
 import UIKit
 
-//class SettingsCell: UITableViewCell {
-//    var sectionType: SectionType? {
-//        didSet {
-//            guard let sectionType = sectionType else { return }
-//            textLabel?.text = sectionType.description
-//            switchControl.isHidden = !sectionType.containsSwitch
-//        }
-//    }
-//
-//    lazy var switchControl: UISwitch = {
-//        let switchControl = UISwitch()
-//        switchControl.isOn = true
-//        switchControl.onTintColor = UIColor(red: 55/255, green: 120/255, blue: 250/255, alpha: 1)
-//        switchControl.translatesAutoresizingMaskIntoConstraints = false
-//        switchControl.addTarget(self, action: #selector(handleSwitchAction), for: .valueChanged)
-//        return switchControl
-//    }()
-//
-//    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-//        super.init(style: style, reuseIdentifier: reuseIdentifier)
-//        addSubview(switchControl)
-//        switchControl.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-//        switchControl.rightAnchor.constraint(equalTo: rightAnchor, constant: -12).isActive = true
-//    }
-//
-//    required init?(coder aDecoder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-//
-//    @objc func handleSwitchAction(sender: UISwitch) {
-//        if sender.isOn {
-//            print("Turned on")
-//        } else {
-//            print("Turned off")
-//        }
-//    }
-//
-//}
-
 class DeviceInfoCell: UITableViewCell {
     var nameLabel = UILabel()
     var idLabel = UILabel()
@@ -146,18 +107,7 @@ class SettingsCell: UITableViewCell {
 
 class DevicesCell : UITableViewCell {
     var childLabel = UILabel()
-    
-    var sectionType: SectionType? {
-        didSet {
-            guard let sectionType = sectionType else {return}
-            textLabel!.text = sectionType.description
-            textLabel!.translatesAutoresizingMaskIntoConstraints = false
-            textLabel!.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
-            textLabel!.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 16).isActive = true
-            self.bottomAnchor.constraint(equalTo: textLabel!.bottomAnchor, constant: 10).isActive = true
-        }
-    }
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -168,7 +118,7 @@ class DevicesCell : UITableViewCell {
         childLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
         childLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 16).isActive = true
         childLabel.font = UIFont.systemFont(ofSize: 16)
-         self.bottomAnchor.constraint(equalTo: childLabel.bottomAnchor, constant: 10).isActive = true
+        self.bottomAnchor.constraint(equalTo: childLabel.bottomAnchor, constant: 10).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {
