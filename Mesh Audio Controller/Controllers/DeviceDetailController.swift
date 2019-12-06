@@ -12,7 +12,6 @@ import CoreBluetooth
 class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
     let nc = NotificationCenter.default
     private let bluetoothManager = BluetoothManager.sharedManager
-    private let reuseIdentifier = "SettingsCell"
     private let peripheralState = [
         "disconnected",
         "connecting",
@@ -75,8 +74,12 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
         self.tableView.insetsContentViewsToSafeArea = true
         self.serviceTable = [service]
         self.characteristicTable = [one, two, three]
-        self.tableView.register(SettingsCell.self, forCellReuseIdentifier: reuseIdentifier)
+        self.tableView.register(SettingsCell.self, forCellReuseIdentifier: "settingsIdentifier")
+        self.tableView.register(DeviceInfoCell.self, forCellReuseIdentifier: "devicesInfoIdentifier")
+        self.tableView.register(CharacteristicsCell.self, forCellReuseIdentifier: "characteristicsIdentifier")
         self.tableView.register(Header.self, forHeaderFooterViewReuseIdentifier: "sectionHeader")
+        self.tableView.register(DevicesCell.self, forCellReuseIdentifier: "devicesIdentifier")
+        
         tableView.tableFooterView = UIView()
     }
     
@@ -155,82 +158,44 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! SettingsCell
         guard let section = SettingsSection(rawValue: indexPath.section) else { return UITableViewCell() }
         switch section {
         case .DeviceInfo:
-            cell.switchControl.isHidden = true
-            
-            let nameLabel = UILabel()
-            nameLabel.text = "Name: \(peripheral!.name ?? "N/A")"
-            nameLabel.translatesAutoresizingMaskIntoConstraints = false
-            nameLabel.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.systemFont(ofSize: 18))
-            nameLabel.adjustsFontForContentSizeCategory = true
-            cell.addSubview(nameLabel)
-            nameLabel.topAnchor.constraint(equalTo: cell.topAnchor, constant: 10).isActive = true
-            nameLabel.leftAnchor.constraint(equalTo: cell.leftAnchor, constant: 16).isActive = true
-            nameLabel.font = UIFont.systemFont(ofSize: 16)
-            
-            let idLabel = UILabel()
-            idLabel.translatesAutoresizingMaskIntoConstraints = false
-            idLabel.text = "UUID: \(peripheral!.identifier.uuidString )"
-            idLabel.font = UIFont.systemFont(ofSize: 16)
-            cell.addSubview(idLabel)
-            idLabel.leadingAnchor.constraint(equalTo:  cell.leadingAnchor, constant: 16).isActive = true
-            idLabel.trailingAnchor.constraint(equalTo:  cell.trailingAnchor).isActive = true
-            idLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 10).isActive = true
-            
-            let servicesLabel = UILabel()
-            servicesLabel.translatesAutoresizingMaskIntoConstraints = false
+            let cell = tableView.dequeueReusableCell(withIdentifier: "devicesInfoIdentifier", for: indexPath) as! DeviceInfoCell
+            cell.nameLabel.text = "Name: \(peripheral!.name ?? "N/A")"
+            cell.idLabel.text = "UUID: \(peripheral!.identifier.uuidString )"
             let serviceNames = services.map{$0.uuid}
-            servicesLabel.text = "Services: \(serviceNames)"
-            servicesLabel.font = UIFont.systemFont(ofSize: 16)
-            cell.addSubview(servicesLabel)
-            servicesLabel.leadingAnchor.constraint(equalTo: cell.leadingAnchor, constant: 16).isActive = true
-            servicesLabel.trailingAnchor.constraint(equalTo: cell.trailingAnchor).isActive = true
-            servicesLabel.topAnchor.constraint(equalTo: idLabel.bottomAnchor, constant: 10).isActive = true
-            servicesLabel.numberOfLines = 0
-            
-            cell.bottomAnchor.constraint(equalTo: servicesLabel.bottomAnchor, constant: 10).isActive = true
+            cell.servicesLabel.text = "Services: \(serviceNames)"
+            return cell
             
         case .Characteristics:
-            cell.switchControl.isHidden = true
+            let cell = tableView.dequeueReusableCell(withIdentifier: "characteristicsIdentifier", for: indexPath) as! CharacteristicsCell
             let characteristic = characteristics[indexPath.row]
-            let uuidLabel = UILabel()
-            uuidLabel.text = "\(characteristic.uuid)"
-            uuidLabel.translatesAutoresizingMaskIntoConstraints = false
-            cell.addSubview(uuidLabel)
-            uuidLabel.leadingAnchor.constraint(equalTo: cell.leadingAnchor, constant: 16).isActive = true
-            uuidLabel.trailingAnchor.constraint(equalTo: cell.trailingAnchor).isActive = true
-            uuidLabel.centerYAnchor.constraint(equalTo: cell.centerYAnchor).isActive = true
+            cell.uuidLabel.text = "\(characteristic.uuid)"
+            return cell
             
         case .Settings:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "settingsIdentifier", for: indexPath) as! SettingsCell
             let settings = Settings(rawValue: indexPath.row)
             if settings!.containsSwitch {
                 cell.selectionStyle = .none
+                cell.switchControl.isHidden = true
             }
             cell.sectionType = settings
+            return cell
         case .Devices:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "devicesIdentifier", for: indexPath) as! DevicesCell
             let row = indexPath.row
             if row < Devices.allCases.count{
                 let devices = Devices(rawValue: indexPath.row)
-                if devices!.containsSwitch {
-                    cell.selectionStyle = .none
-                }
                 cell.sectionType = devices
             }
             else{
-                cell.switchControl.isHidden = true
                 let childName = childDevices[row - Devices.allCases.count]
-                let childLabel = UILabel()
-                childLabel.text = childName
-                childLabel.translatesAutoresizingMaskIntoConstraints = false
-                cell.addSubview(childLabel)
-                childLabel.centerYAnchor.constraint(equalTo: cell.centerYAnchor).isActive = true
-                childLabel.leadingAnchor.constraint(equalTo: cell.leadingAnchor, constant: 16).isActive = true
+                cell.childLabel.text = childName
             }
+            return cell
         }
-        return cell
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let section = SettingsSection(rawValue: indexPath.section) else { return }
@@ -246,12 +211,13 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
             alert.addAction(UIAlertAction(title: "No", style: .default, handler: nil))
             alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action: UIAlertAction) -> Void in
                 let dataField = alert.textFields![0]
-                let text = dataField.text?.data(using: .utf8)
-                if text != nil{
-                    self.sendData(data: NSData(data: text!), characteristic: characteristic)
+                let text = dataField.text!
+                if text != "" {
+                    let data = text.data(using: .utf8)
+                    self.sendData(data: NSData(data: data!), characteristic: characteristic)
                 }
                 else{
-                    self.dismiss(animated: true, completion: nil)
+                    alert.dismiss(animated: true, completion: nil)
                     let warning = UIAlertController(title: "Data cannot be empty", message: nil, preferredStyle: .alert)
                     warning.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
                     self.present(warning, animated: true)
@@ -291,17 +257,19 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
                 alert.addAction(UIAlertAction(title: "No", style: .default, handler: nil))
                 alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action: UIAlertAction) -> Void in
                     let dataField = alert.textFields![0]
-                    let text = dataField.text?.data(using: .utf8)
-                    let characteristicField = CBUUID(string: alert.textFields![1].text!) //create a new CBUUID with the field's data
-                    for char in self.characteristics{
-                        print(char.uuid)
+                    let text = dataField.text!
+                    let characteristicField = UUID(uuidString: alert.textFields![1].text!) //create a new CBUUID with the field's data
+                    if characteristicField != nil && text != "" {
+                        let characteristicField = CBUUID(string: alert.textFields![1].text!)
+                        let characteristic = self.characteristics.first(where: {$0.uuid.uuidString == characteristicField.uuidString})
+                        let data = text.data(using: .utf8)
+                        self.sendData(data: NSData(data: data!), characteristic: characteristic)
                     }
-                    let characteristic = self.characteristics.first(where: {$0.uuid.uuidString == characteristicField.uuidString})
-                    if text != nil && characteristic != nil{
-                        self.sendData(data: NSData(data: text!), characteristic: characteristic)
-                    }
-                    else if text != nil {
-                        self.sendData(data: NSData(data: text!), characteristic: self.characteristics[0])
+                    else{
+                        alert.dismiss(animated: true, completion: nil)
+                        let warning = UIAlertController(title: "Invalid UUID Entered", message: nil, preferredStyle: .alert)
+                        warning.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+                        self.present(warning, animated: true)
                     }
                 }))
                 self.present(alert, animated: true)
