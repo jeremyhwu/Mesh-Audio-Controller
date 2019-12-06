@@ -17,12 +17,14 @@ protocol SectionType: CustomStringConvertible {
 
 enum SettingsSection: Int, CaseIterable, CustomStringConvertible {
     case DeviceInfo
+    case Characteristics
     case Settings
     case Devices
     
     var description: String {
         switch self {
         case .DeviceInfo: return "Device Info"
+        case .Characteristics: return "Characteristics"
         case .Settings: return "Settings"
         case .Devices: return "Child Devices"
         }
@@ -63,7 +65,7 @@ enum Settings: Int, CaseIterable, SectionType {
         switch self {
         case .rename: return "Rename Device (Root)"
         case .mute: return "Mute Device"
-        case .getData: return "Retrieve New Data"
+        case .getData: return "Update Characteristics"
         case .sendData: return "Send Custom Data"
         }
     }
