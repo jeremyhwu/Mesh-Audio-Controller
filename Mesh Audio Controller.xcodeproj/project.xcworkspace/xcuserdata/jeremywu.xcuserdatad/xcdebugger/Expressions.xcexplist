@@ -11,7 +11,7 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "DeviceDetailController.tableView(_:viewForHeaderInSection:):DeviceDetailController.swift">
+         contextName = "closure #1 in closure #2 in DevicesViewController.configureNotifications():DevicesViewController.swift">
       </ContextState>
       <ContextState
          contextName = "DeviceInfoHeader.init(frame:):DeviceInfoHeader.swift">
@@ -49,6 +49,14 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "BluetoothManager.peripheral(_:didWriteValueFor:error:):BluetoothManager.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "let test = String(bytes: characteristic.data, encoding: .utf8)">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "closure #1 in DevicesViewController.centralManager(_:didConnect:):DevicesViewController.swift">
       </ContextState>
       <ContextState
@@ -60,7 +68,7 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "closure #1 in closure #2 in DevicesViewController.configureNotifications():DevicesViewController.swift">
+         contextName = "DeviceDetailController.tableView(_:viewForHeaderInSection:):DeviceDetailController.swift">
       </ContextState>
    </ContextStates>
 </VariablesViewState>

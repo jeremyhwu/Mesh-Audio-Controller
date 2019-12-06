@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1A647383238A54CD00E6D389 /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A647382238A54CD00E6D389 /* SettingsCell.swift */; };
+		1A647383238A54CD00E6D389 /* SettingsCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A647382238A54CD00E6D389 /* SettingsCells.swift */; };
 		1A647389238A585000E6D389 /* SettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A647388238A585000E6D389 /* SettingsSection.swift */; };
 		1A7A8AFF237E04C300AD6308 /* DeviceDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7A8AFE237E04C300AD6308 /* DeviceDetailController.swift */; };
 		1A7EC08B23613E4D00B2B136 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7EC08A23613E4D00B2B136 /* AppDelegate.swift */; };
@@ -42,7 +42,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		1A647382238A54CD00E6D389 /* SettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCell.swift; sourceTree = "<group>"; };
+		1A647382238A54CD00E6D389 /* SettingsCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCells.swift; sourceTree = "<group>"; };
 		1A647388238A585000E6D389 /* SettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSection.swift; sourceTree = "<group>"; };
 		1A7A8AFE237E04C300AD6308 /* DeviceDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDetailController.swift; sourceTree = "<group>"; };
 		1A7EC08723613E4D00B2B136 /* Mesh Audio Controller.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mesh Audio Controller.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -155,7 +155,7 @@
 			isa = PBXGroup;
 			children = (
 				1A7EC0C12361434B00B2B136 /* DeviceCell.swift */,
-				1A647382238A54CD00E6D389 /* SettingsCell.swift */,
+				1A647382238A54CD00E6D389 /* SettingsCells.swift */,
 				1ABC22B52372262A00E3E6FC /* Header.swift */,
 			);
 			path = Views;
@@ -295,7 +295,7 @@
 				1ABC22B62372262A00E3E6FC /* Header.swift in Sources */,
 				1A7A8AFF237E04C300AD6308 /* DeviceDetailController.swift in Sources */,
 				1AB442E2238FE90000CCE397 /* BluetoothManager.swift in Sources */,
-				1A647383238A54CD00E6D389 /* SettingsCell.swift in Sources */,
+				1A647383238A54CD00E6D389 /* SettingsCells.swift in Sources */,
 				1A7EC0BB23613FFC00B2B136 /* DevicesViewController.swift in Sources */,
 				1A7EC0C22361434B00B2B136 /* DeviceCell.swift in Sources */,
 				1A7EC0BE2361420900B2B136 /* UIViewExt.swift in Sources */,
