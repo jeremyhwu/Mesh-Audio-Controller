@@ -258,7 +258,7 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
                 alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action: UIAlertAction) -> Void in
                     let dataField = alert.textFields![0]
                     let text = dataField.text!
-                    let characteristicField = UUID(uuidString: alert.textFields![1].text!) //create a new CBUUID with the field's data
+                    let characteristicField = UUID(uuidString: alert.textFields![1].text!) //create a new UUID with the field's data
                     if characteristicField != nil && text != "" {
                         let characteristicField = CBUUID(string: alert.textFields![1].text!)
                         let characteristic = self.characteristics.first(where: {$0.uuid.uuidString == characteristicField.uuidString})
