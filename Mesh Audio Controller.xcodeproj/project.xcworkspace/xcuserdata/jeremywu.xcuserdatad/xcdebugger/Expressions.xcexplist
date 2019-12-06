@@ -3,28 +3,6 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "DeviceDetailController.tableView(_:didSelectRowAt:):DeviceDetailController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "deviceInfo">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "closure #1 in closure #2 in DevicesViewController.configureNotifications():DevicesViewController.swift">
-      </ContextState>
-      <ContextState
-         contextName = "DeviceInfoHeader.init(frame:):DeviceInfoHeader.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "self.">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "DevicesViewController.connectToDevice(peripheral:):DevicesViewController.swift">
-      </ContextState>
-      <ContextState
          contextName = "DeviceDetailController.viewDidLoad():DeviceDetailController.swift">
          <PersistentStrings>
             <PersistentString
@@ -33,18 +11,13 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "DeviceDetailController.configureTable():DeviceDetailController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "self.tableView.tableHeaderView">
-            </PersistentString>
-         </PersistentStrings>
+         contextName = "DevicesViewController.connectToDevice(peripheral:):DevicesViewController.swift">
       </ContextState>
       <ContextState
-         contextName = "closure #1 in closure #1 in DeviceDetailController.configureNotifications():DeviceDetailController.swift">
+         contextName = "closure #1 in closure #2 in DeviceDetailController.configureNotifications():DeviceDetailController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "characteristic">
+               value = "characteristics">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -57,7 +30,34 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "DeviceDetailController.tableView(_:didSelectRowAt:):DeviceDetailController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "deviceInfo">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "DeviceDetailController.tableView(_:viewForHeaderInSection:):DeviceDetailController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "DeviceInfoHeader.init(frame:):DeviceInfoHeader.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "closure #1 in DevicesViewController.centralManager(_:didConnect:):DevicesViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "DeviceDetailController.configureTable():DeviceDetailController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.tableView.tableHeaderView">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "DevicesViewController.centralManager(_:didConnect:):DevicesViewController.swift">
@@ -68,7 +68,15 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "DeviceDetailController.tableView(_:viewForHeaderInSection:):DeviceDetailController.swift">
+         contextName = "closure #1 in closure #1 in DeviceDetailController.configureNotifications():DeviceDetailController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "characteristic">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in closure #2 in DevicesViewController.configureNotifications():DevicesViewController.swift">
       </ContextState>
    </ContextStates>
 </VariablesViewState>

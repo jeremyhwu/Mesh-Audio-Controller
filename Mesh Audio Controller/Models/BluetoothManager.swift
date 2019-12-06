@@ -162,8 +162,10 @@ extension BluetoothManager : CBPeripheralDelegate {
     }
 
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
+        if characteristic.value != nil {
         let data = [UInt8](characteristic.value!)
         print("Wrote \(data) to \(characteristic.uuid)")
+        }
         nc.post(name: BluetoothManager.wroteValue, object: self, userInfo: ["peripheral":peripheral, "characteristic":characteristic])
     }
 }
