@@ -252,8 +252,8 @@
             filePath = "Mesh Audio Controller/Controllers/DeviceDetailController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "215"
-            endingLineNumber = "215"
+            startingLineNumber = "214"
+            endingLineNumber = "214"
             landmarkName = "tableView(_:didSelectRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -268,8 +268,8 @@
             filePath = "Mesh Audio Controller/Controllers/DeviceDetailController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "307"
-            endingLineNumber = "307"
+            startingLineNumber = "306"
+            endingLineNumber = "306"
             landmarkName = "tableView(_:viewForHeaderInSection:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -284,8 +284,8 @@
             filePath = "Mesh Audio Controller/Controllers/DeviceDetailController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "205"
-            endingLineNumber = "205"
+            startingLineNumber = "204"
+            endingLineNumber = "204"
             landmarkName = "tableView(_:didSelectRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
