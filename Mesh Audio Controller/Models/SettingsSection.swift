@@ -71,7 +71,6 @@ enum Settings: Int, CaseIterable, SectionType {
 
 enum Devices: Int, CaseIterable, SectionType {
     case refreshDevices
-    case removeDevice
     
     var containsSwitch: Bool {
         return false
@@ -80,7 +79,6 @@ enum Devices: Int, CaseIterable, SectionType {
     var description: String {
         switch self {
         case .refreshDevices: return "Refresh Device List"
-        case .removeDevice: return "Remove Device"
         }
     }
 }

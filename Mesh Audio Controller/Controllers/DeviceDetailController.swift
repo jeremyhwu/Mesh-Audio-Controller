@@ -44,21 +44,25 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
     
     func configureNotifications() {
         nc.addObserver(forName: BluetoothManager.characteristicUpdated, object: nil, queue: OperationQueue.main) { (notification) in
-            let characteristic = notification.userInfo!["characteristic"] as! CBCharacteristic
-            print("Characteristic updated: \(characteristic.uuid)")
-            switch characteristic.uuid {
-            case self.deviceList:
-                return
-            default:
-                return
+            DispatchQueue.main.async {
+                let characteristic = notification.userInfo!["characteristic"] as! CBCharacteristic
+                print("Characteristic updated: \(characteristic.uuid)")
+                switch characteristic.uuid {
+                case self.deviceList:
+                    return
+                default:
+                    return
+                }
             }
         }
         nc.addObserver(forName: BluetoothManager.wroteValue, object: nil, queue: OperationQueue.main) { (notification) in
-            let characteristic = notification.userInfo!["characteristic"] as! CBCharacteristic
-            let data = [UInt8](characteristic.value!)
-            let alert = UIAlertController(title: "Succesfully wrote value \(data) to characteristic: \(characteristic.uuid)", message: nil, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
-            self.present(alert, animated: true)
+            DispatchQueue.main.async {
+                let characteristic = notification.userInfo!["characteristic"] as! CBCharacteristic
+                let data = [UInt8](characteristic.value!)
+                let alert = UIAlertController(title: "Succesfully wrote value \(data) to characteristic: \(characteristic.uuid)", message: nil, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+                self.present(alert, animated: true)
+            }
         }
     }
     
@@ -68,6 +72,7 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
     }
     
     func configureTable(){
+        self.tableView.insetsContentViewsToSafeArea = true
         self.serviceTable = [service]
         self.characteristicTable = [one, two, three]
         self.tableView.register(SettingsCell.self, forCellReuseIdentifier: reuseIdentifier)
@@ -104,7 +109,7 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
     
     //GATT Services
     func getData() {
-        self.peripheral?.discoverServices(nil) //refresh service list
+        characteristics = []
         let services = self.peripheral?.services
         if services != nil {
             for service in services!{
@@ -121,9 +126,17 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
         }
     }
     
-    func sendData(data: NSData){
-        peripheral?.writeValue(data as Data, for: characteristics[1], type: .withResponse)
+    func sendData(data: NSData, characteristic: CBCharacteristic?){
+        if characteristic != nil {
+            peripheral?.writeValue(data as Data, for: characteristic!, type: .withResponse)
+        }
+        else{
+            let alert = UIAlertController(title: "Invalid characteristic entered", message: nil, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+            self.present(alert, animated: true)
+        }
     }
+    
     
     func refreshChildDevices(){
         var num = NSInteger(1)
@@ -132,41 +145,64 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
         //        peripheral?.writeValue(data as Data, for: , type: .withResponse)
     }
     
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+    
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard let section = SettingsSection(rawValue: indexPath.section) else { return 50 }
-        switch section {
-        case .DeviceInfo:
-            return 70
-        case .Settings:
-            return 50
-        case .Devices:
-            return 50
-        }
+        return UITableView.automaticDimension
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! SettingsCell
-        cell.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
-        cell.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
         guard let section = SettingsSection(rawValue: indexPath.section) else { return UITableViewCell() }
         switch section {
         case .DeviceInfo:
             cell.switchControl.isHidden = true
+            
             let nameLabel = UILabel()
             nameLabel.text = "Name: \(peripheral!.name ?? "N/A")"
             nameLabel.translatesAutoresizingMaskIntoConstraints = false
+            nameLabel.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.systemFont(ofSize: 18))
+            nameLabel.adjustsFontForContentSizeCategory = true
             cell.addSubview(nameLabel)
             nameLabel.topAnchor.constraint(equalTo: cell.topAnchor, constant: 10).isActive = true
-            nameLabel.leftAnchor.constraint(equalTo: cell.leftAnchor, constant: 16).isActive = true
-            nameLabel.font = UIFont.systemFont(ofSize: 16)
+            nameLabel.leftAnchor.constraint(equalTo: cell.leftAnchor, constant: 10).isActive = true
+            nameLabel.font = UIFont.systemFont(ofSize: 14)
+            
             let idLabel = UILabel()
             idLabel.translatesAutoresizingMaskIntoConstraints = false
             idLabel.text = "UUID: \(peripheral!.identifier.uuidString )"
+            idLabel.font = UIFont.systemFont(ofSize: 14)
             cell.addSubview(idLabel)
+            idLabel.leadingAnchor.constraint(equalTo:  cell.leadingAnchor, constant: 10).isActive = true
+            idLabel.trailingAnchor.constraint(equalTo:  cell.trailingAnchor).isActive = true
             idLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 10).isActive = true
-            idLabel.leftAnchor.constraint(equalTo: cell.leftAnchor, constant: 16).isActive = true
-            idLabel.font = UIFont.systemFont(ofSize: 15)
             
+            let servicesLabel = UILabel()
+            servicesLabel.translatesAutoresizingMaskIntoConstraints = false
+            let serviceNames = services.map{$0.uuid}
+            servicesLabel.text = "Services: \(serviceNames)"
+            servicesLabel.font = UIFont.systemFont(ofSize: 14)
+            cell.addSubview(servicesLabel)
+            servicesLabel.leadingAnchor.constraint(equalTo: cell.leadingAnchor, constant: 10).isActive = true
+            servicesLabel.trailingAnchor.constraint(equalTo: cell.trailingAnchor).isActive = true
+            servicesLabel.topAnchor.constraint(equalTo: idLabel.bottomAnchor, constant: 10).isActive = true
+            servicesLabel.numberOfLines = 0
+            
+            let characteristicsLabel = UILabel()
+            characteristicsLabel.translatesAutoresizingMaskIntoConstraints = false
+            let characteristicNames = characteristics.map{$0.uuid}
+            characteristicsLabel.text = "Characteristics: \(characteristicNames)"
+            characteristicsLabel.font = UIFont.systemFont(ofSize: 14)
+            cell.addSubview(characteristicsLabel)
+            characteristicsLabel.leadingAnchor.constraint(equalTo: cell.leadingAnchor, constant: 10).isActive = true
+            characteristicsLabel.trailingAnchor.constraint(equalTo: cell.trailingAnchor).isActive = true
+            characteristicsLabel.topAnchor.constraint(equalTo: servicesLabel.bottomAnchor, constant: 10).isActive = true
+            characteristicsLabel.numberOfLines = 0
+            
+            cell.bottomAnchor.constraint(equalTo: characteristicsLabel.bottomAnchor, constant: 10).isActive = true
+                
         case .Settings:
             let settings = Settings(rawValue: indexPath.row)
             if settings!.containsSwitch {
@@ -190,7 +226,7 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
                 childLabel.translatesAutoresizingMaskIntoConstraints = false
                 cell.addSubview(childLabel)
                 childLabel.centerYAnchor.constraint(equalTo: cell.centerYAnchor).isActive = true
-                childLabel.leftAnchor.constraint(equalTo: cell.leftAnchor, constant: 16).isActive = true
+                childLabel.leftAnchor.constraint(equalTo: cell.leftAnchor, constant: 14).isActive = true
             }
         }
         return cell
@@ -223,16 +259,27 @@ class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
             case .none:
                 return
             case .some(.sendData):
-                let alert = UIAlertController(title: "Send new data?", message: nil, preferredStyle: .alert)
+                let alert = UIAlertController(title: "Send custom data?", message: nil, preferredStyle: .alert)
                 alert.addTextField { (textField) in
                     textField.placeholder = "Enter data"
                 }
+                alert.addTextField { (textField) in
+                    textField.placeholder = "Enter Characteristic"
+                }
                 alert.addAction(UIAlertAction(title: "No", style: .default, handler: nil))
                 alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action: UIAlertAction) -> Void in
-                    let textField = alert.textFields![0]
-                    let text = textField.text?.data(using: .utf8)
-                    if text != nil {
-                        self.sendData(data: NSData(data: text!))
+                    let dataField = alert.textFields![0]
+                    let text = dataField.text?.data(using: .utf8)
+                    let characteristicField = alert.textFields![1].text!
+                    for char in self.characteristics{
+                        print(char.uuid)
+                    }
+                    let characteristic = self.characteristics.first(where: {$0.uuid.uuidString == characteristicField})
+                    if text != nil && characteristic != nil{
+                        self.sendData(data: NSData(data: text!), characteristic: characteristic)
+                    }
+                    else if text != nil {
+                        self.sendData(data: NSData(data: text!), characteristic: self.characteristics[0])
                     }
                 }))
                 self.present(alert, animated: true)
