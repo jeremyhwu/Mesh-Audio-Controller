@@ -14,6 +14,12 @@ protocol DeviceDetailDelegate {
     func disconnect(peripheral: CBPeripheral, controller: DeviceDetailController)
 }
 
+
+/*
+ Main controller for the project. Allows users to scan for peripherals and then connect
+ to them. Scanning for new devices will not cancel any current connections: only disconnected
+ peripherals will be refreshed.
+ */
 class DevicesViewController: UIViewController {
     private let bluetoothManager = BluetoothManager.sharedManager
     let nc = NotificationCenter.default

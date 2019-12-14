@@ -9,6 +9,11 @@
 import UIKit
 import CoreBluetooth
 
+/*
+ Class for device cells inside of the DevicesViewController table. Each cell contains the name,
+ id, state of the connected peripheral as well as the actual peripheral. Storing the peripheral itself
+ allows it to be easily accessed through the didSelectRowAt function and passed into the detail view.
+ */
 class DeviceCell: UITableViewCell {
     var deviceNameLabel = UILabel()
     var deviceIDLabel = UILabel()

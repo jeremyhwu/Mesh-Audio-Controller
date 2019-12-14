@@ -9,6 +9,9 @@
 import Foundation
 import UIKit
 
+/*
+ Header for the main device controller view
+ */
 class Header: UITableViewHeaderFooterView {
     let title = UILabel()
     

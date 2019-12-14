@@ -5,15 +5,17 @@
 //  Created by jeremy Wu on 11/23/19.
 //  Copyright © 2019 jeremy Wu. All rights reserved.
 //
-
-
-// Enumerables for devicedetailcontroller table sections
 import UIKit
 import CoreBluetooth
 
+/*
+ These enumerables allow the table cells in the device detail controller to be dynamic.
+ They contain one or more cases which are returned based on the index of the selected cell.
+ */
 protocol SectionType: CustomStringConvertible {
     var containsSwitch: Bool { get }
 }
+
 
 enum SettingsSection: Int, CaseIterable, CustomStringConvertible {
     case DeviceInfo

@@ -9,6 +9,12 @@
 import CoreBluetooth
 import UIKit
 
+/*
+ Bluetooth manager that contains a static instance of itself. This allows the same bluetooth manager
+ and peripheral list to be shared across all views. This class implements the CBPeripheral and CBCentralManager protocols
+ and handles connecting/disconnecting from peripherals as well as writing/receiving data that is being
+ advertised by connected peripherals.
+ */
 class BluetoothManager : NSObject {
     static let sharedManager = BluetoothManager() //create a static instance to share manager across views
     

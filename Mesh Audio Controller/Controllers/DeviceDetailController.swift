@@ -9,6 +9,16 @@
 import UIKit
 import CoreBluetooth
 
+/*
+ Controller for the device detail view. This view provides additional options for connected peripherals.
+ This controller provides the following functionality:
+    Disconnect from the current peripheral
+    Mute Devices
+    Rename Devices
+    Add/Remove devices from the mesh network
+    Change Volume
+    Play/Pause Music
+ */
 class DeviceDetailController: UITableViewController, CBPeripheralDelegate {
     let nc = NotificationCenter.default
     private let bluetoothManager = BluetoothManager.sharedManager

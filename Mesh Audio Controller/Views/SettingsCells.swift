@@ -7,6 +7,11 @@
 //
 import UIKit
 
+/*
+ Collection of classes that represent table cells in the device detail view. Each section
+ of the table contains varying types of data so they each need their own custom table cell.
+ */
+
 class DeviceInfoCell: UITableViewCell {
     var nameLabel = UILabel()
     var idLabel = UILabel()
